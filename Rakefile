@@ -5,8 +5,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "strava"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Provides a Ruby interface to the Strava api}
+    gem.description = %Q{Strava (http://www.strava.com/) allows access to it's data via a JSON api.  This gem wraps that API an allows you to interact with Ruby classes instead.}
     gem.email = "steven_chanin@alum.mit.edu"
     gem.homepage = "http://github.com/stevenchanin/strava"
     gem.authors = ["Steven Chanin"]

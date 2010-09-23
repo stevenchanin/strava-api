@@ -1,6 +1,24 @@
 = strava
 
-Description goes here.
+Strava (http://www.strava.com/) allows access to it's data via a JSON api.  This gem wraps that API an allows you to interact with Ruby classes instead.
+
+= Installation
+
+  gem install strava
+  
+depending on your installation, you may need to use sudo
+
+= Requirements
+
+None
+
+= Usage
+
+TBD
+
+= Contributors
+
+Strava is maintained by {Steve Chanin}[http://devleverage.com].
 
 == Note on Patches/Pull Requests
  
@@ -14,4 +32,4 @@ Description goes here.
 
 == Copyright
 
-Copyright (c) 2010 Steven Chanin. See LICENSE for details.
+Copyright (c) 2010 steven_chanin. See LICENSE for details.
