@@ -30,6 +30,15 @@ module Strava
       @values[:id]
     end
     
+    def to_s
+      result = []
+      @values.each do |key, value|
+        result << ":#{key} => #{value}" if value
+      end
+      
+      "#<#{self.class} [#{result.join(', ')}]>"
+    end
+    
     def method_missing(symbol, *args)
       if @valid_attributes.values.include?(symbol)
         @values[symbol]
