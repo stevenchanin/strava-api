@@ -3,20 +3,19 @@ module Strava
     def clubs(name)
       result = call("clubs", "clubs", {:name => name})
 
-      result["clubs"].collect {|item| Club.new(item["name"], item["id"])}
+      result["clubs"].collect {|item| Club.new(item)}
     end
     
     def club_show(id)
       result = call("clubs/#{id}", "club", {})
 
-      club_data = result["club"]
-      Club.new(club_data["name"], club_data["id"], club_data["description"], club_data["location"])
+      Club.new(result["club"])
     end
     
     def club_members(id)
       result = call("clubs/#{id}/members", "members", {})
 
-      result["members"].collect {|item| Member.new(item["name"], item["id"])}
+      result["members"].collect {|item| Member.new(item)}
     end
   end
 end
