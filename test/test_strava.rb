@@ -168,11 +168,15 @@ class TestStrava < Test::Unit::TestCase
       :start_date_local => Time.parse("2010-02-28T08:31:35Z"),
       :id => 77563,
       :maximum_speed => 64251.72
-      
-      #TODO: handle athlete & bike
     }.each do |property, value| 
       assert result[property] == value
     end
+    
+    assert result[:athlete].is_a?(Strava::Member)
+    assert result[:athlete].username == "julianbill"
+    
+    assert result[:bike].is_a?(Strava::Bike)
+    assert result[:bike].name == "Serotta Legend Ti"
   end
   
   def test_club_show_bad_id
@@ -188,6 +192,9 @@ class TestStrava < Test::Unit::TestCase
     result.each do |effort|
       assert effort.is_a?(Strava::Effort)
     end
+    
+    assert result.first.segment.is_a?(Strava::Segment)
+    assert result.first.segment.name == "Panhandle to GGP"
   end
 
 end
