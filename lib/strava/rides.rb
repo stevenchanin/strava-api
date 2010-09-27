@@ -7,7 +7,8 @@ module Strava
         :athlete_name => 'athleteName',
         :start_date => 'startDate',
         :end_date => 'endDate',
-        :start_id => 'startId'
+        :start_id => 'startId',
+        :offset => 'offset'
       }
       
       #convert between rails format names and camel case
@@ -28,6 +29,7 @@ module Strava
       Ride.new(result["ride"])
     end
     
+    #returns all efforts, don't need an offset
     def ride_efforts(id)
       result = call("rides/#{id}/efforts", "efforts", {})
     

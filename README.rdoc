@@ -44,6 +44,7 @@ Using the API, you can search for rides using any combination of criteria
 * start_date: Optional. Day on which to start search for Rides. The date should be formatted YYYY-MM-DD. The date is the local time of when the ride started.
 * end_date: Optional. Day on which to end search for Rides. The date should be formatted YYYY-MM-DD. The date is the local time of when the ride started.
 * start_id: Optional. Only return Rides with an Id greater than or equal to the startId.
+* offset: Optional. Rather than returning the first 50 matching rides, return the rides <offset> from the top of the results.
 
 To get set of rides (by club),
 
@@ -54,6 +55,20 @@ by athlete and start date
   s.rides(:athlete_id => athlete_id, :start_date => Date.civil(2010,9,21))
 
 etc
+
+=== When more than 50 rides match your criteria
+In response to a .rides call, Strava will return the first 50 rides that match whatever criteria are supplied. To see all matching rides, you will need to call .rides and also include an :offset parameter
+
+  s.rides(:club_id => club_id, :offset => 50)
+
+In order to see all the rides, you will have to nest your .rides call inside of some sort of loop that updates offset after processing each block of rides
+
+  offset = 0
+  while (rides = s.rides(:club_id => club_id, :offset => offset, :start_date => Date.civil(2010,9,15))) && !rides.empty? do
+    #work on that set of rides
+    offset += rides.size
+  end
+  puts "received a total of #{offset} rides"
 
 To see details on a particular ride
 
@@ -87,12 +102,18 @@ To refine the data returned by segment_efforts, you can pass any combination of 
 * end_date: Optional. Day on which to end search for Efforts. The date should be formatted YYYY-MM-DD. The date is the local time of when the effort started.
 * start_id: Optional. Only return Effforts with an Id greater than or equal to the startId.
 * best: Optional. Default is true. Whether to only show an athlete's best effort (shortest elapsed time) vs. all their efforts if there are multiple matching effort for a single athlete.
+* offset: Optional. Rather than returning the first 50 matching rides, return the rides <offset> from the top of the results.
 
 Example
 
   #returns the rides on that segment by members of a specific club on or after 7/1/10.
   #only shows each riders best time
   s.segment_efforts(segment_id, :club_id => club_id, :start_date => Date.civil(2010,7,1), :best => true)
+
+=== When more than 50 efforts match your criteria
+  In response to a .segment_efforts call, Strava will return the first 50 efforts that match whatever criteria are supplied. To see all matching efforts, you will need to call .segment_efforts and also include an :offset parameter.  
+
+See the instructions above for an example of how this works with .rides.
 
 == Efforts
 To get full details on an effort (i.e. specifics on how a rider did on a specific stretch of a ride), you

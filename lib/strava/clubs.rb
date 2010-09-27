@@ -1,5 +1,6 @@
 module Strava
   module Clubs
+    #returns all clubs, don't need an offset
     def clubs(name)
       result = call("clubs", "clubs", {:name => name})
 
@@ -12,6 +13,7 @@ module Strava
       Club.new(result["club"])
     end
     
+    #returns all members, don't need an offset
     def club_members(id)
       result = call("clubs/#{id}/members", "members", {})
 

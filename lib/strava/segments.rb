@@ -1,5 +1,6 @@
 module Strava
   module Segments
+    #returns all segments, don't need an offset
     def segments(name)
       result = call("segments", "segments", {:name => name})
 
@@ -20,7 +21,8 @@ module Strava
         :start_date => 'startDate',
         :end_date => 'endDate',
         :start_id => 'startId',
-        :best => 'best'
+        :best => 'best',
+        :offset => 'offset'
       }
       
       #convert between rails format names and camel case
