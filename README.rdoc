@@ -10,8 +10,9 @@ depending on your installation, you may need to use sudo
 
 = Requirements
 
-HTTParty
-mocha (only if you want to run the tests)
+httparty [http://github.com/jnunemaker/httparty]
+
+mocha (only if you want to run the tests) [http://github.com/floehopper/mocha]
 
 = Usage
 Strava is a Ruby wrapper for working with Strava API.
