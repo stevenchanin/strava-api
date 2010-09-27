@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{strava}
-  s.version = "0.1.0"
+  s.version = "0.8.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Steven Chanin"]
@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
      "lib/strava.rb",
      "lib/strava/base.rb",
      "lib/strava/clubs.rb",
+     "lib/strava/efforts.rb",
      "lib/strava/rides.rb",
      "lib/strava/segments.rb",
      "test/helper.rb",
