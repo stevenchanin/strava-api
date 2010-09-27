@@ -61,6 +61,35 @@ A ride is composed of a list of efforts (time, etc spent on each segment which m
 
   s.ride_efforts(ride_id)
 
+== Segments
+Rides can be thought of as a sequence of segments (e.g. my "trip to the kitchen" is "up the stairs" + "down the hall" + "across the living room"). When rides are uploaded to Strava, it breaks them down into the segments they contain based on the route taken. Segments have names, measurements, and keep statistics about who rode them on which date, how long it took, etc.
+
+To find a segment by name,
+
+  s.segments("part of segment name")
+
+to see measurements / details on a segment,
+
+  s.segment_show(segment_id)
+
+to see who rode a segment and how they did,
+
+  s.segment_efforts(segment_id)
+
+To refine the data returned by segment_efforts, you can pass any combination of optional parameters:
+
+* club_id: Optional. Id of the Club for which to search for member's Efforts.
+* athlete_id: Optional. Id of the Athlete for which to search for Efforts.
+* athlete_name: Optional. Username of the Athlete for which to search for Rides.
+* start_date: Optional. Day on which to start search for Efforts. The date should be formatted YYYY-MM-DD. The date is the local time of when the effort started.
+* end_date: Optional. Day on which to end search for Efforts. The date should be formatted YYYY-MM-DD. The date is the local time of when the effort started.
+* start_id: Optional. Only return Effforts with an Id greater than or equal to the startId.
+* best: Optional. Default is true. Whether to only show an athlete's best effort (shortest elapsed time) vs. all their efforts if there are multiple matching effort for a single athlete.
+
+  #returns the rides on that segment by members of a specific club on or after 7/1/10.
+  #only shows each riders best time
+  s.segment_efforts(segment_id, :club_id => club_id, :start_date => Date.civil(2010,7,1), :best => true)
+
 = Contributors
 
 Strava is maintained by {Steve Chanin}[http://devleverage.com].

@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
      "lib/strava/base.rb",
      "lib/strava/clubs.rb",
      "lib/strava/rides.rb",
+     "lib/strava/segments.rb",
      "test/helper.rb",
      "test/test_strava.rb"
   ]

@@ -259,4 +259,133 @@ class TestStrava < Test::Unit::TestCase
     assert result.first.segment.name == "Panhandle to GGP"
   end
 
+  def test_segments_index
+    #curl http://www.strava.com/api/v1/segments?name=hawk%20hill
+    api_result = JSON.parse '{"segments":[{"name":"Hawk Hill Saddle","id":99243},{"name":"Hawk Hill","id":229781},{"name":"Hawk Hill from Bunker Road","id":229783},{"name":"Ham Hawk Hill | PD","id":243831},{"name":"Hawk Hill from Fort Baker","id":461025},{"name":"Hawk Hill from Sausalito","id":522551},{"name":"Hawk Hill Backside Descent","id":589138},{"name":"Backside Hawk Hill Climb","id":615706},{"name":"Hawk Hill Saddle from Sausalito","id":617665},{"name":"Hawk Hill Saddle from Ft Baker","id":619494}]}'
+    api_result.stubs(:parsed_response).returns("")
+    Strava::Base.stubs(:get).with('/segments', {:query => {:name => 'Hawk Hill'}}).returns(api_result)
+
+    result = @s.segments('Hawk Hill')
+    
+    assert result.is_a?(Array)
+
+    result.each do |segment|
+      assert segment.is_a?(Strava::Segment)
+    end
+  end
+
+  def test_segments_index_that_returns_nothing
+    #curl http://www.strava.com/api/v1/segments?name=hawk%20hillxxxy
+    api_result = JSON.parse '{"segments":[]}'
+    api_result.stubs(:parsed_response).returns("")
+    Strava::Base.stubs(:get).with('/segments', {:query => {:name => 'Hawk Hill98xcasdf'}}).returns(api_result)
+
+    result = @s.segments('Hawk Hill98xcasdf')
+    
+    assert result.is_a?(Array)
+    assert result.empty?
+  end
+
+  def test_segment_show
+    #rl http://www.strava.com/api/v1/segments/99243
+    api_result = JSON.parse '{"segment":{"averageGrade":4.63873,"climbCategory":"4","name":"Hawk Hill Saddle","elevationGain":76.553,"distance":1771.88,"elevationHigh":172.694,"id":99243,"elevationLow":90.5013}}'
+    api_result.stubs(:parsed_response).returns("")
+    Strava::Base.stubs(:get).with('/segments/99243', { :query => {} }).returns(api_result)
+
+    result = @s.segment_show(99243)
+    
+    assert result.is_a?(Strava::Segment)
+    assert result.name == "Hawk Hill Saddle"
+    assert result.id == 99243
+    assert result.average_grade == 4.63873
+    assert result.climb_category == "4"
+    assert result.elevation_gain == 76.553
+    assert result.distance == 1771.88
+    assert result.elevation_high == 172.694
+    assert result.elevation_low == 90.5013
+  end
+  
+  def test_segment_efforts_with_invalid_id
+    api_result = JSON.parse '{"error":"Invalid segments/0"}'
+    api_result.stubs(:parsed_response).returns("")
+    Strava::Base.stubs(:get).with('/segments/0/efforts', {:query => {}}).returns(api_result)
+
+    expect_error(Strava::InvalidResponseError) { @s.segment_efforts(0) }
+    
+    assert @s.errors.include?("Invalid segments/0")
+  end
+  
+  def test_segment_efforts_index
+    #curl http://www.strava.com/api/v1/segments/99243/efforts
+    #note: cut some out because the response was so long
+    api_result = JSON.parse '{"efforts":[{"startDate":"2010-04-29T13:59:24Z","startDateLocal":"2010-04-29T06:59:24Z","activityId":95206,"timeZoneOffset":-8.0,"athlete":{"username":"davidbelden","name":"David Belden","id":8},"elapsedTime":247,"id":911835},{"startDate":"2010-01-28T15:04:59Z","startDateLocal":"2010-01-28T07:04:59Z","activityId":67051,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":250,"id":567839},{"startDate":"2010-01-31T18:35:51Z","startDateLocal":"2010-01-31T10:35:51Z","activityId":68093,"timeZoneOffset":-8.0,"athlete":{"username":"dhaynes","name":"Derek Haynes","id":1781},"elapsedTime":261,"id":579787}],"segment":{"name":"Hawk Hill Saddle","id":99243}}'
+    api_result.stubs(:parsed_response).returns("")
+    Strava::Base.stubs(:get).with('/segments/99243/efforts', {:query => {}}).returns(api_result)
+
+    result = @s.segment_efforts(99243)
+    
+    assert result.is_a?(Array)
+    
+    result.each do |effort|
+      assert effort.is_a?(Strava::Effort)
+    end
+  end
+
+  def test_segment_efforts_index_by_athlete_id
+    #curl http://www.strava.com/api/v1/segments/99243/efforts?athleteId=1377
+    api_result = JSON.parse '{"efforts":[{"startDate":"2010-01-28T15:04:59Z","startDateLocal":"2010-01-28T07:04:59Z","activityId":67051,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":250,"id":567839},{"startDate":"2010-02-04T15:02:29Z","startDateLocal":"2010-02-04T07:02:29Z","activityId":69675,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":264,"id":597043},{"startDate":"2010-05-11T13:54:04Z","startDateLocal":"2010-05-11T06:54:04Z","activityId":100392,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":269,"id":983029},{"startDate":"2010-07-08T13:54:40Z","startDateLocal":"2010-07-08T06:54:40Z","activityId":135052,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":271,"id":1591612},{"startDate":"2010-01-15T15:08:03Z","startDateLocal":"2010-01-15T07:08:03Z","activityId":62521,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":277,"id":517053},{"startDate":"2010-01-27T15:05:46Z","startDateLocal":"2010-01-27T07:05:46Z","activityId":66977,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":280,"id":567121},{"startDate":"2010-03-31T00:32:18Z","startDateLocal":"2010-03-30T17:32:18Z","activityId":85948,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":285,"id":792315},{"startDate":"2010-01-30T23:15:05Z","startDateLocal":"2010-01-30T15:15:05Z","activityId":67623,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":290,"id":574957},{"startDate":"2010-04-10T20:45:31Z","startDateLocal":"2010-04-10T13:45:31Z","activityId":88363,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":290,"id":831915},{"startDate":"2010-04-13T13:53:55Z","startDateLocal":"2010-04-13T06:53:55Z","activityId":96689,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":291,"id":931209},{"startDate":"2010-03-30T14:08:07Z","startDateLocal":"2010-03-30T07:08:07Z","activityId":85949,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":292,"id":792330},{"startDate":"2010-01-16T19:51:04Z","startDateLocal":"2010-01-16T11:51:04Z","activityId":62823,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":296,"id":519899},{"startDate":"2010-01-13T15:05:47Z","startDateLocal":"2010-01-13T07:05:47Z","activityId":62517,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":309,"id":517035},{"startDate":"2010-02-10T15:03:11Z","startDateLocal":"2010-02-10T07:03:11Z","activityId":73763,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":314,"id":644917},{"startDate":"2010-07-30T02:35:46Z","startDateLocal":"2010-07-29T19:35:46Z","activityId":147817,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":319,"id":1847072},{"startDate":"2010-02-08T01:09:02Z","startDateLocal":"2010-02-07T17:09:02Z","activityId":73761,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":326,"id":644899},{"startDate":"2010-05-09T01:38:55Z","startDateLocal":"2010-05-08T18:38:55Z","activityId":99414,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":326,"id":967659}],"segment":{"name":"Hawk Hill Saddle","id":99243}}'
+    api_result.stubs(:parsed_response).returns("")
+    Strava::Base.stubs(:get).with('/segments/99243/efforts', {:query => {'athleteId' => 1377}}).returns(api_result)
+
+    result = @s.segment_efforts(99243, {:athlete_id => 1377})
+    
+    assert result.is_a?(Array)
+    
+    result.each do |effort|
+      assert effort.is_a?(Strava::Effort)
+      assert effort.athlete.id == 1377, "#{effort.athlete.id} != 1377"
+    end
+  end
+
+  def test_segment_efforts_index_by_athlete_id_and_start_date
+    #curl "http://www.strava.com/api/v1/segments/99243/efforts?athleteId=1377&startDate=2010-07-01"
+    api_result = JSON.parse '{"efforts":[{"startDate":"2010-07-08T13:54:40Z","startDateLocal":"2010-07-08T06:54:40Z","activityId":135052,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":271,"id":1591612},{"startDate":"2010-07-30T02:35:46Z","startDateLocal":"2010-07-29T19:35:46Z","activityId":147817,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":319,"id":1847072}],"segment":{"name":"Hawk Hill Saddle","id":99243}}'
+    api_result.stubs(:parsed_response).returns("")
+    Strava::Base.stubs(:get).with('/segments/99243/efforts', {:query => {'athleteId' => 1377, 'startDate' => Date.civil(2010,7,1)}}).returns(api_result)
+
+    result = @s.segment_efforts(99243, {:athlete_id => 1377, :start_date => Date.civil(2010,7,1)})
+    
+    assert result.is_a?(Array)
+    
+    result.each do |effort|
+      assert effort.is_a?(Strava::Effort)
+      assert effort.athlete.id == 1377, "#{effort.athlete.id} != 1377"
+
+      #works with the real api call, but the stub that is just JSON parsing isn't converting times to Time objects
+      #assert effort.start_date >= Time.utc(2010,7,1), "#{effort.start_date} < 2010-7-1"
+    end
+  end
+
+  def test_segment_efforts_index_by_club_id_and_best
+    #using test data for club 15
+    #curl http://www.strava.com/api/v1/segments/99243/efforts?clubId=15&best=true
+    api_result = JSON.parse '{"efforts":[{"startDate":"2010-04-29T13:59:24Z","startDateLocal":"2010-04-29T06:59:24Z","activityId":95206,"timeZoneOffset":-8.0,"athlete":{"username":"davidbelden","name":"David Belden","id":8},"elapsedTime":247,"id":911835},{"startDate":"2010-01-28T15:04:59Z","startDateLocal":"2010-01-28T07:04:59Z","activityId":67051,"timeZoneOffset":-8.0,"athlete":{"username":"jsimons","name":"Jay Simons","id":1377},"elapsedTime":250,"id":567839},{"startDate":"2010-01-31T18:35:51Z","startDateLocal":"2010-01-31T10:35:51Z","activityId":68093,"timeZoneOffset":-8.0,"athlete":{"username":"dhaynes","name":"Derek Haynes","id":1781},"elapsedTime":261,"id":579787},{"startDate":"2009-11-05T18:25:24Z","startDateLocal":"2009-11-05T10:25:24Z","activityId":64013,"timeZoneOffset":-8.0,"athlete":{"username":"jberkman","name":"jacob berkman","id":3005},"elapsedTime":275,"id":533823},{"startDate":"2010-07-01T13:53:26Z","startDateLocal":"2010-07-01T06:53:26Z","activityId":128896,"timeZoneOffset":-8.0,"athlete":{"username":"vitalyg","name":"Vitaly Gashpar","id":4488},"elapsedTime":282,"id":1463618},{"startDate":"2010-06-13T00:56:07Z","startDateLocal":"2010-06-12T17:56:07Z","activityId":118803,"timeZoneOffset":-8.0,"athlete":{"username":"jhudson","name":"Jared Hudson","id":1215},"elapsedTime":283,"id":1297738},{"startDate":"2009-09-04T02:27:14Z","startDateLocal":"2009-09-03T18:27:14Z","activityId":33479,"timeZoneOffset":-8.0,"athlete":{"username":"ykawase","name":"T. Joe Mulvaney","id":1107},"elapsedTime":284,"id":139887},{"startDate":"2010-06-17T13:54:17Z","startDateLocal":"2010-06-17T06:54:17Z","activityId":120897,"timeZoneOffset":-8.0,"athlete":{"username":"matth","name":"Matt Hough","id":4542},"elapsedTime":286,"id":1336905},{"startDate":"2010-06-08T13:55:08Z","startDateLocal":"2010-06-08T06:55:08Z","activityId":115701,"timeZoneOffset":-8.0,"athlete":{"username":"jonringer","name":"Jon Ringer","id":4604},"elapsedTime":287,"id":1245196},{"startDate":"2010-04-13T13:53:33Z","startDateLocal":"2010-04-13T06:53:33Z","activityId":88677,"timeZoneOffset":-8.0,"athlete":{"username":"danv","name":"Dan Vigil","id":1167},"elapsedTime":291,"id":835674},{"startDate":"2010-03-30T14:08:06Z","startDateLocal":"2010-03-30T07:08:06Z","activityId":85754,"timeZoneOffset":-8.0,"athlete":{"username":"mgaiman","name":"Michael Gaiman","id":721},"elapsedTime":294,"id":790228},{"startDate":"2010-06-12T00:06:18Z","startDateLocal":"2010-06-11T17:06:18Z","activityId":118354,"timeZoneOffset":-8.0,"athlete":{"username":"jherrick","name":"Jason Herrick","id":1665},"elapsedTime":294,"id":1290745},{"startDate":"2009-11-29T22:13:26Z","startDateLocal":"2009-11-29T14:13:26Z","activityId":52093,"timeZoneOffset":-8.0,"athlete":{"username":"jblohm","name":"Joern Blohm","id":1723},"elapsedTime":296,"id":416889},{"startDate":"2010-01-28T15:04:48Z","startDateLocal":"2010-01-28T07:04:48Z","activityId":67047,"timeZoneOffset":-8.0,"athlete":{"username":"pd","name":"Peter Durham","id":45},"elapsedTime":298,"id":567793},{"startDate":"2010-03-05T17:40:47Z","startDateLocal":"2010-03-05T09:40:47Z","activityId":78672,"timeZoneOffset":-8.0,"athlete":{"username":"cb","name":"Carl B","id":1889},"elapsedTime":298,"id":699178},{"startDate":"2010-07-02T02:22:42Z","startDateLocal":"2010-07-01T19:22:42Z","activityId":129698,"timeZoneOffset":-8.0,"athlete":{"username":"bprescott","name":"Bruce Prescott","id":2061},"elapsedTime":310,"id":1478082},{"startDate":"2009-09-04T02:27:17Z","startDateLocal":"2009-09-03T18:27:17Z","activityId":36895,"timeZoneOffset":-8.0,"athlete":{"username":"ycolin","name":"Youenn Colin","id":1127},"elapsedTime":312,"id":258717},{"startDate":"2010-04-18T18:54:36Z","startDateLocal":"2010-04-18T11:54:36Z","activityId":90940,"timeZoneOffset":-8.0,"athlete":{"username":"tbrady","name":"Travis Brady","id":1607},"elapsedTime":312,"id":861754},{"startDate":"2009-11-19T15:05:14Z","startDateLocal":"2009-11-19T07:05:14Z","activityId":51461,"timeZoneOffset":-8.0,"athlete":{"username":"valko","name":"Andrew Valko","id":787},"elapsedTime":315,"id":409757},{"startDate":"2010-05-04T13:53:40Z","startDateLocal":"2010-05-04T06:53:40Z","activityId":100932,"timeZoneOffset":-8.0,"athlete":{"username":"qmecke","name":"Quintin Mecke","id":1529},"elapsedTime":315,"id":990554},{"startDate":"2010-06-26T16:51:41Z","startDateLocal":"2010-06-26T09:51:41Z","activityId":125957,"timeZoneOffset":-8.0,"athlete":{"username":"joemulvaney","name":"Joe Mulvaney","id":1487},"elapsedTime":316,"id":1417247},{"startDate":"2010-07-02T02:22:41Z","startDateLocal":"2010-07-01T19:22:41Z","activityId":129495,"timeZoneOffset":-8.0,"athlete":{"username":"zach","name":"Zach Bass","id":1055},"elapsedTime":319,"id":1474299},{"startDate":"2009-11-29T18:25:23Z","startDateLocal":"2009-11-29T10:25:23Z","activityId":51759,"timeZoneOffset":-8.0,"athlete":{"username":"huphtur","name":"M Appelman","id":1157},"elapsedTime":322,"id":413623},{"startDate":"2010-01-21T00:59:42Z","startDateLocal":"2010-01-20T16:59:42Z","activityId":64435,"timeZoneOffset":-8.0,"athlete":{"username":"eugenekim","name":"Eugene Kim","id":1213},"elapsedTime":322,"id":539059},{"startDate":"2009-08-20T14:02:39Z","startDateLocal":"2009-08-20T06:02:39Z","activityId":30369,"timeZoneOffset":-8.0,"athlete":{"username":"bkuczynski","name":"Brian Kuczynski","id":619},"elapsedTime":323,"id":111417},{"startDate":"2010-06-20T16:07:54Z","startDateLocal":"2010-06-20T09:07:54Z","activityId":122312,"timeZoneOffset":-8.0,"athlete":{"username":"jwells","name":"Jason Wells","id":1219},"elapsedTime":324,"id":1358461},{"startDate":"2010-03-31T00:32:19Z","startDateLocal":"2010-03-30T17:32:19Z","activityId":85839,"timeZoneOffset":-8.0,"athlete":{"username":"danno","name":"Dan Oehlberg","id":401},"elapsedTime":326,"id":791136},{"startDate":"2009-10-07T14:02:40Z","startDateLocal":"2009-10-07T06:02:40Z","activityId":40777,"timeZoneOffset":-8.0,"athlete":{"username":"tc","name":"Travis Crawford","id":723},"elapsedTime":329,"id":298897},{"startDate":"2010-04-07T01:20:36Z","startDateLocal":"2010-04-06T18:20:36Z","activityId":87672,"timeZoneOffset":-8.0,"athlete":{"username":"eneedham","name":"Erik Needham","id":4538},"elapsedTime":330,"id":818067},{"startDate":"2010-07-01T01:00:12Z","startDateLocal":"2010-06-30T18:00:12Z","activityId":128662,"timeZoneOffset":-8.0,"athlete":{"username":"nates","name":"Nate S","id":4285},"elapsedTime":330,"id":1460693},{"startDate":"2010-05-21T15:12:58Z","startDateLocal":"2010-05-21T08:12:58Z","activityId":104830,"timeZoneOffset":-8.0,"athlete":{"username":"kcowling","name":"Keith Cowling","id":3926},"elapsedTime":336,"id":1057536},{"startDate":"2010-02-17T23:28:03Z","startDateLocal":"2010-02-17T15:28:03Z","activityId":75154,"timeZoneOffset":-8.0,"athlete":{"username":"jonathanhunt","name":"Jonathan Hunt","id":2329},"elapsedTime":337,"id":662152},{"startDate":"2009-09-04T02:27:13Z","startDateLocal":"2009-09-03T18:27:13Z","activityId":33501,"timeZoneOffset":-8.0,"athlete":{"username":"greg101","name":"Gregory Allen","id":1143},"elapsedTime":340,"id":140065},{"startDate":"2009-11-17T18:49:29Z","startDateLocal":"2009-11-17T10:49:29Z","activityId":63725,"timeZoneOffset":-8.0,"athlete":{"username":"toshok","name":"Chris Toshok","id":3007},"elapsedTime":340,"id":529631},{"startDate":"2010-03-31T00:32:18Z","startDateLocal":"2010-03-30T17:32:18Z","activityId":86079,"timeZoneOffset":-8.0,"athlete":{"username":"tsantaniello","name":"T. Santaniello","id":3793},"elapsedTime":340,"id":794145},{"startDate":"2009-02-02T23:12:09Z","startDateLocal":"2009-02-02T15:12:09Z","activityId":33075,"timeZoneOffset":-8.0,"athlete":{"username":"double_d","name":"Dylan DiBona","id":1205},"elapsedTime":341,"id":136143},{"startDate":"2010-07-08T13:54:42Z","startDateLocal":"2010-07-08T06:54:42Z","activityId":133181,"timeZoneOffset":-8.0,"athlete":{"username":"spatlove","name":"S. Patlove (recumbent)","id":3875},"elapsedTime":341,"id":1547704},{"startDate":"2010-06-30T01:53:43Z","startDateLocal":"2010-06-29T18:53:43Z","activityId":128204,"timeZoneOffset":-8.0,"athlete":{"username":"mikwat","name":"Michael Watts","id":1163},"elapsedTime":345,"id":1451412},{"startDate":"2010-08-18T14:29:07Z","startDateLocal":"2010-08-18T07:29:07Z","activityId":160681,"timeZoneOffset":-8.0,"athlete":{"username":"mkahn","name":"Mark Kahn","id":4526},"elapsedTime":346,"id":2095970},{"startDate":"2010-07-08T13:54:41Z","startDateLocal":"2010-07-08T06:54:41Z","activityId":133134,"timeZoneOffset":-8.0,"athlete":{"username":"kolofsen","name":"Ken Olofsen","id":2921},"elapsedTime":348,"id":1546484},{"startDate":"2010-07-23T02:39:25Z","startDateLocal":"2010-07-22T19:39:25Z","activityId":144477,"timeZoneOffset":-8.0,"athlete":{"username":"gferrando","name":"G. Ferrando","id":1633},"elapsedTime":350,"id":1772964},{"startDate":"2009-11-15T17:58:12Z","startDateLocal":"2009-11-15T09:58:12Z","activityId":48973,"timeZoneOffset":-8.0,"athlete":{"username":"hobe","name":"Daniel Hobe","id":1113},"elapsedTime":352,"id":381555},{"startDate":"2010-07-08T13:54:41Z","startDateLocal":"2010-07-08T06:54:41Z","activityId":133179,"timeZoneOffset":-8.0,"athlete":{"username":"kmok","name":"Kent Mok","id":4607},"elapsedTime":352,"id":1547618},{"startDate":"2010-07-11T15:24:40Z","startDateLocal":"2010-07-11T08:24:40Z","activityId":134535,"timeZoneOffset":-8.0,"athlete":{"username":"nskinner","name":"nate skinner","id":1217},"elapsedTime":356,"id":1582023},{"startDate":"2009-09-16T14:45:42Z","startDateLocal":"2009-09-16T06:45:42Z","activityId":36407,"timeZoneOffset":-8.0,"athlete":{"username":"roderic","name":"R. Campbell","id":983},"elapsedTime":357,"id":170273},{"startDate":"2010-07-01T13:53:02Z","startDateLocal":"2010-07-01T06:53:02Z","activityId":128915,"timeZoneOffset":-8.0,"athlete":{"username":"mrampton","name":"Mark Rampton","id":1375},"elapsedTime":360,"id":1463925},{"startDate":"2009-09-27T20:19:43Z","startDateLocal":"2009-09-27T13:19:43Z","activityId":94786,"timeZoneOffset":-8.0,"athlete":{"username":"chilsenbeck","name":"c. hilsenbeck","id":4569},"elapsedTime":362,"id":908201},{"startDate":"2007-10-06T23:19:48Z","startDateLocal":"2007-10-06T15:19:48Z","activityId":43221,"timeZoneOffset":-8.0,"athlete":{"username":"shannon","name":"Shannon Coen","id":1137},"elapsedTime":366,"id":326985},{"startDate":"2010-08-27T02:30:56Z","startDateLocal":"2010-08-26T19:30:56Z","activityId":181412,"timeZoneOffset":-8.0,"athlete":{"username":"cgoldstein","name":"Cliff Goldstein","id":7649},"elapsedTime":367,"id":2473678},{"startDate":"2010-05-19T00:54:09Z","startDateLocal":"2010-05-18T17:54:09Z","activityId":104215,"timeZoneOffset":-8.0,"athlete":{"username":"kjeffers","name":"Kyle Jeffers","id":4540},"elapsedTime":370,"id":1047624}],"segment":{"name":"Hawk Hill Saddle","id":99243}}'
+    api_result.stubs(:parsed_response).returns("")
+    Strava::Base.stubs(:get).with('/segments/99243/efforts', {:query => {'clubId' => 15, 'best' => true}}).returns(api_result)
+
+    result = @s.segment_efforts(99243, {:club_id => 15, :best => true})
+    
+    assert result.is_a?(Array)
+    
+    result.each do |effort|
+      assert effort.is_a?(Strava::Effort)
+    end
+    
+    athletes = result.collect {|e| e.athlete.username}.sort
+    i = 0
+    while i < athletes.length do
+      assert athletes[i] != athletes[i+1], "Problem -- two athletes in the list with the same username"
+      i += 1
+    end
+  end
 end
