@@ -40,6 +40,10 @@ module Strava
       "#<#{self.class} [#{result.join(', ')}]>"
     end
     
+    #cleanup how Strava objects are displayed in irb
+    alias_method :original_inspect, :inspect
+    alias_method :inspect, :to_s
+    
     def method_missing(symbol, *args)
       if @valid_attributes.values.include?(symbol)
         @values[symbol]
