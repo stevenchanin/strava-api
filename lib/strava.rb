@@ -194,4 +194,5 @@ end
 require 'strava/clubs'
 require 'strava/rides'
 require 'strava/segments'
+require 'strava/efforts'
 require 'strava/base'

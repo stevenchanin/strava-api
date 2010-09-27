@@ -5,6 +5,7 @@ module Strava
     include Strava::Clubs
     include Strava::Rides
     include Strava::Segments
+    include Strava::Efforts
     
     format :json
     base_uri 'www.strava.com/api/v1'

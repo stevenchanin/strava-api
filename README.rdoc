@@ -94,6 +94,13 @@ Example
   #only shows each riders best time
   s.segment_efforts(segment_id, :club_id => club_id, :start_date => Date.civil(2010,7,1), :best => true)
 
+== Efforts
+To get full details on an effort (i.e. specifics on how a rider did on a specific stretch of a ride), you
+
+  s.effort_show(effort_id)
+  
+this returns distance, maximum speed, average speed, etc, etc for that part of the ride.
+
 = Contributors
 
 Strava is maintained by {Steve Chanin}[http://devleverage.com].
