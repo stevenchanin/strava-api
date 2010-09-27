@@ -56,6 +56,14 @@ by athlete and start date
 
 etc
 
+To see details on a particular ride
+
+  s.ride_show(ride_id)
+  
+A ride is composed of a list of efforts (time, etc spent on each segment which makes up part of the ride).  To see the efforts for a particular ride,
+
+  s.ride_efforts(ride_id)
+
 === When more than 50 rides match your criteria
 In response to a .rides call, Strava will return the first 50 rides that match whatever criteria are supplied. To see all matching rides, you will need to call .rides and also include an :offset parameter
 
@@ -69,14 +77,6 @@ In order to see all the rides, you will have to nest your .rides call inside of 
     offset += rides.size
   end
   puts "received a total of #{offset} rides"
-
-To see details on a particular ride
-
-  s.ride_show(ride_id)
-  
-A ride is composed of a list of efforts (time, etc spent on each segment which makes up part of the ride).  To see the efforts for a particular ride,
-
-  s.ride_efforts(ride_id)
 
 == Segments
 Rides can be thought of as a sequence of segments (e.g. my "trip to the kitchen" is "up the stairs" + "down the hall" + "across the living room"). When rides are uploaded to Strava, it breaks them down into the segments they contain based on the route taken. Segments have names, measurements, and keep statistics about who rode them on which date, how long it took, etc.
@@ -111,7 +111,7 @@ Example
   s.segment_efforts(segment_id, :club_id => club_id, :start_date => Date.civil(2010,7,1), :best => true)
 
 === When more than 50 efforts match your criteria
-  In response to a .segment_efforts call, Strava will return the first 50 efforts that match whatever criteria are supplied. To see all matching efforts, you will need to call .segment_efforts and also include an :offset parameter.  
+In response to a .segment_efforts call, Strava will return the first 50 efforts that match whatever criteria are supplied. To see all matching efforts, you will need to call .segment_efforts and also include an :offset parameter.  
 
 See the instructions above for an example of how this works with .rides.
 
