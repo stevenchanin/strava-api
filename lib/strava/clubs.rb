@@ -2,6 +2,11 @@ module Strava
   module Clubs
     #returns all clubs, don't need an offset
     def clubs(name)
+      raise Strava::CommandError if name.blank?
+      
+      name = name.strip
+      raise Strava::CommandError if name.empty?
+
       result = call("clubs", "clubs", {:name => name})
 
       result["clubs"].collect {|item| Club.new(item)}

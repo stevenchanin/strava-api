@@ -39,6 +39,14 @@ class TestStrava < Test::Unit::TestCase
   
   ###### Testing Strava::Clubs
   #test clubs methods
+  def test_clubs_no_search_string
+    expect_error(Strava::CommandError) { @s.clubs('') }
+  end
+  
+  def test_clubs_all_spaces_search_string
+    expect_error(Strava::CommandError) { @s.clubs('  ') }
+  end
+
   def test_clubs_index
     #curl http://www.strava.com/api/v1/clubs?name=X
     api_result = JSON.parse '{"clubs":[{"name":"SLO Nexus","id":23},{"name":"Ex Has Beens That Never Were","id":31},{"name":"Team FeXY","id":150},{"name":"Paris Fixed Gear","id":247}]}'
