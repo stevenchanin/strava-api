@@ -13,8 +13,53 @@ depending on your installation, you may need to use sudo
 None
 
 = Usage
+Strava is a Ruby wrapper for working with Strava API.
 
-TBD
+== Creating a Strava::Base object
+In order to interact with the Strava API, you need a Strava::Base object
+
+  s = Strava::Base.new
+
+== Clubs
+The Strava API allows you to search for clubs by name,
+
+  s.clubs("part of club name")
+
+get full details on a club,
+
+  s.club_show(club_id)
+
+and see the members of a club
+
+  s.club_members(club_id)
+  
+== Rides
+Using the API, you can search for rides using any combination of criteria
+
+* club_id: Optional. Id of the Club for which to search for member's Rides.
+* athlete_id: Optional. Id of the Athlete for which to search for Rides.
+* athlete_name: Optional. Username of the Athlete for which to search for Rides.
+* start_date: Optional. Day on which to start search for Rides. The date should be formatted YYYY-MM-DD. The date is the local time of when the ride started.
+* end_date: Optional. Day on which to end search for Rides. The date should be formatted YYYY-MM-DD. The date is the local time of when the ride started.
+* start_id: Optional. Only return Rides with an Id greater than or equal to the startId.
+
+To get set of rides (by club),
+
+  s.rides(:club_id => club_id)
+
+by athlete and start date
+
+  s.rides(:athlete_id => athlete_id, :start_date => Date.civil(2010,9,21))
+
+etc
+
+To see details on a particular ride
+
+  s.ride_show(ride_id)
+  
+A ride is composed of a list of efforts (time, etc spent on each segment which makes up part of the ride).  To see the efforts for a particular ride,
+
+  s.ride_efforts(ride_id)
 
 = Contributors
 
