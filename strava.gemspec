@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Steven Chanin"]
-  s.date = %q{2010-09-25}
+  s.date = %q{2010-09-27}
   s.description = %q{Strava (http://www.strava.com/) allows access to it's data via a JSON api.  This gem wraps that API an allows you to interact with Ruby classes instead.}
   s.email = %q{steven_chanin@alum.mit.edu}
   s.extra_rdoc_files = [
@@ -43,11 +43,14 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<httparty>, ["~> 0.6.1"])
+      s.add_runtime_dependency(%q<mocha>, ["~> 0.9.8"])
     else
       s.add_dependency(%q<httparty>, ["~> 0.6.1"])
+      s.add_dependency(%q<mocha>, ["~> 0.9.8"])
     end
   else
     s.add_dependency(%q<httparty>, ["~> 0.6.1"])
+    s.add_dependency(%q<mocha>, ["~> 0.9.8"])
   end
 end
 

@@ -12,7 +12,8 @@ begin
     gem.authors = ["Steven Chanin"]
     #not sure why files wasn't picking up subdirectors of lib when it seems to do so for hominid...
     gem.files = FileList['{lib,test}/**/*'] + %w(CHANGELOG.rdoc init.rb LICENSE Rakefile README.rdoc) - FileList['test/*.log']
-    gem.add_dependency "httparty", "~> 0.6.1"
+    gem.add_dependency "httparty", " ~> 0.6.1"
+    gem.add_dependency "mocha", " ~> 0.9.8"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

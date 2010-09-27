@@ -17,7 +17,7 @@ module Strava
     def call(command, key, options)
       begin
         result = self.class.get("/#{command}", :query => options)
-      rescue
+      rescue HTTParty::UnsupportedFormat, HTTParty::UnsupportedURIScheme, HTTParty::ResponseError, HTTParty::RedirectionTooDeep
         raise NetworkError.new
       end
       
