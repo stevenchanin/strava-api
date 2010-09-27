@@ -86,6 +86,7 @@ To refine the data returned by segment_efforts, you can pass any combination of 
 * start_id: Optional. Only return Effforts with an Id greater than or equal to the startId.
 * best: Optional. Default is true. Whether to only show an athlete's best effort (shortest elapsed time) vs. all their efforts if there are multiple matching effort for a single athlete.
 
+
   #returns the rides on that segment by members of a specific club on or after 7/1/10.
   #only shows each riders best time
   s.segment_efforts(segment_id, :club_id => club_id, :start_date => Date.civil(2010,7,1), :best => true)
