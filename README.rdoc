@@ -10,7 +10,8 @@ depending on your installation, you may need to use sudo
 
 = Requirements
 
-None
+HTTParty
+mocha (only if you want to run the tests)
 
 = Usage
 Strava is a Ruby wrapper for working with Strava API.
