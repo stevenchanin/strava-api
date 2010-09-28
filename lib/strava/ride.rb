@@ -45,6 +45,7 @@ module Strava
 
     def show
       self.merge(@connection.ride_show(self.id))
+      self
     end
 
     def efforts

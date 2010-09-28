@@ -7,6 +7,7 @@ module Strava
     
     def show
       self.merge(@connection.club_show(self.id))
+      self
     end
     
     def members

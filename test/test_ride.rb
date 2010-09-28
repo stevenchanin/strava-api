@@ -23,7 +23,8 @@ class TestRide < Test::Unit::TestCase
     assert @ride.distance.nil?
     assert @ride.location.nil?
 
-    @ride.show
+    result = @ride.show
+    assert result.is_a?(Strava::Ride)
     
     assert @ride.id == 191846
     assert @ride.name == "from SVRMC"

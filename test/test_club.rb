@@ -21,7 +21,9 @@ class TestClub < Test::Unit::TestCase
     assert @club.description.nil?
     assert @club.location.nil?
 
-    @club.show
+    result = @club.show
+    
+    assert result.is_a?(Strava::Club)
     
     assert @club.description == "SLO Nexus brings together people who love to ride bikes, race bikes, and promote bike riding in our community. Our fresh outlook on the local bike scene incorporates support, fun, education, and fitness and is designed to bring together the growing number"
     assert @club.location == "San Luis Obispo, CA"
