@@ -1,13 +1,14 @@
 module Strava
   class HashBasedStore
-    def initialize(attribute_map, nested_class_map, options)
+    def initialize(connection, attribute_map, nested_class_map, options)
+      @connection = connection
       @valid_attributes = attribute_map
       @nested_class_map = nested_class_map
     
       @values = {}
       @valid_attributes.each do |json_key, ruby_key|
         value = options[json_key]
-        @values[ruby_key] = value.is_a?(Hash) ? @nested_class_map[ruby_key].new(value) : value
+        @values[ruby_key] = value.is_a?(Hash) ? @nested_class_map[ruby_key].new(@connection, value) : value
       end
     end
   

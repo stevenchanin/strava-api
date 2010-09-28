@@ -4,13 +4,13 @@ module Strava
     def segments(name)
       result = call("segments", "segments", {:name => name})
 
-      result["segments"].collect {|item| Segment.new(item)}
+      result["segments"].collect {|item| Segment.new(self, item)}
     end
 
     def segment_show(id)
       result = call("segments/#{id}", "segment", {})
 
-      Segment.new(result["segment"])
+      Segment.new(self, result["segment"])
     end
 
     def segment_efforts(id, options = {})
@@ -33,7 +33,7 @@ module Strava
 
       result = call("segments/#{id}/efforts", "efforts", filtered_options)
 
-      result["efforts"].collect {|effort| Effort.new(effort)}
+      result["efforts"].collect {|effort| Effort.new(self, effort)}
     end
   end
 end

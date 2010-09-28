@@ -38,8 +38,8 @@ module Strava
 
     NESTED_CLASS_MAP = { :segment => Segment, :athlete => Member, :ride => Ride }
 
-    def initialize(options = {})
-      super(ATTRIBUTE_MAP, NESTED_CLASS_MAP, options)
+    def initialize(connection, options = {})
+      super(connection, ATTRIBUTE_MAP, NESTED_CLASS_MAP, options)
     end
   end #class Effort
 end

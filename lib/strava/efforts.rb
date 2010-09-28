@@ -3,7 +3,7 @@ module Strava
     def effort_show(id)
       result = call("efforts/#{id}", "effort", {})
 
-      Effort.new(result["effort"])
+      Effort.new(self, result["effort"])
     end
   end
 end

@@ -20,8 +20,8 @@ module Strava
       "distance" => :distance,
       "averageGrade" => :average_grade
     }
-    def initialize(options = {})
-      super(ATTRIBUTE_MAP, {}, options)
+    def initialize(connection, options = {})
+      super(connection, ATTRIBUTE_MAP, {}, options)
     end
   end
 end

@@ -20,20 +20,20 @@ module Strava
       raise Strava::CommandError if filtered_options.empty?
 
       result = call("rides", "rides", filtered_options)
-      result["rides"].collect {|item| Ride.new(item)}
+      result["rides"].collect {|item| Ride.new(self, item)}
     end
     
     def ride_show(id)
       result = call("rides/#{id}", "ride", {})
     
-      Ride.new(result["ride"])
+      Ride.new(self, result["ride"])
     end
     
     #returns all efforts, don't need an offset
     def ride_efforts(id)
       result = call("rides/#{id}/efforts", "efforts", {})
     
-      result["efforts"].collect {|effort| Effort.new(effort)}
+      result["efforts"].collect {|effort| Effort.new(self, effort)}
     end
   end
 end
