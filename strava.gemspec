@@ -36,6 +36,7 @@ Gem::Specification.new do |s|
      "lib/strava/segments.rb",
      "test/helper.rb",
      "test/test_base.rb",
+     "test/test_club.rb",
      "test/test_clubs.rb",
      "test/test_hash_based_store.rb",
      "test/test_rides.rb",
@@ -50,6 +51,7 @@ Gem::Specification.new do |s|
   s.test_files = [
     "test/helper.rb",
      "test/test_base.rb",
+     "test/test_club.rb",
      "test/test_clubs.rb",
      "test/test_hash_based_store.rb",
      "test/test_rides.rb",

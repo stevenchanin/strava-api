@@ -4,5 +4,13 @@ module Strava
     def initialize(connection, options = {})
       super(connection, ATTRIBUTE_MAP, {}, options)
     end
+    
+    def show
+      self.merge(@connection.club_show(self.id))
+    end
+    
+    def members
+      @connection.club_members(self.id)
+    end
   end
 end
