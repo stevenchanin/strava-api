@@ -23,7 +23,10 @@ module Strava
         raise NetworkError.new
       end
       
-      raise CommandError.new if result && result.parsed_response == "<html><body><h1>500 Internal Server Error</h1></body></html>"
+      if result && result.parsed_response == "<html><body><h1>500 Internal Server Error</h1></body></html>"
+        @errors << "Strava returned a 500 error"
+        raise CommandError.new 
+      end
       
       @errors << result["error"] if result && result["error"]
       raise InvalidResponseError.new if result.nil? || !result["error"].blank? || result[key].nil?
