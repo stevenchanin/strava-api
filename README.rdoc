@@ -120,6 +120,42 @@ To get full details on an effort (i.e. specifics on how a rider did on a specifi
 
   s.effort_show(effort_id)
   
+== Error Handling
+The Strava gem raises errors under various conditions.
+
+If an error is raised, check .errors on your Strava::Base object to see more details
+
+  s.errors
+
+=== Strava::NetworkError
+This is raised when the attempt to connect to Strava via httparty raises any of the following:
+* HTTParty::UnsupportedFormat
+* HTTParty::UnsupportedURIScheme
+* HTTParty::ResponseError
+* HTTParty::RedirectionTooDeep
+
+=== Strava::InvalidResponseError
+This is raised is the call to Strava returns a result describing an error rather than the data you requested.
+
+=== Strava::CommandError
+This is raised if your request causes Strava to return a 500 Error.
+This is also raised if you attempt to run a command that lacks required parameters.  For example, trying to call
+  .clubs("")
+with an empty string or
+  .rides()
+with no options will raise this error.
+
+=== Strava::InternalError
+This is raised if you attempt to access an invalid property of a result.  For example,
+
+  my_seg = s.segment_show(segment_id)
+  # => returns a <Strava::Segment>
+  
+  my_seg.bogus_property
+  
+will raise a Strava::InternalError
+
+  
 this returns distance, maximum speed, average speed, etc, etc for that part of the ride.
 
 = Contributors
