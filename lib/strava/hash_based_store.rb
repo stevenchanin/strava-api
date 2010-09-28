@@ -35,6 +35,12 @@ module Strava
     alias_method :original_inspect, :inspect
     alias_method :inspect, :to_s
     
+    def merge(other)
+      @valid_attributes.each do |json_key, ruby_key|
+        @values[ruby_key] = other[ruby_key] if other[ruby_key]
+      end
+    end
+    
     def method_missing(symbol, *args)
       if @valid_attributes.values.include?(symbol)
         @values[symbol]

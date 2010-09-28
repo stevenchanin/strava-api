@@ -55,4 +55,25 @@ class TestHashBasedStore < Test::Unit::TestCase
     assert obj.bike.id == @complex_initial_values['bike']['id']
     assert obj.bike.name == @complex_initial_values['bike']['name']
   end
+  
+  def test_merge
+    @big_attribute_map = {'name' => :name, 'id' => :id, "extra1" => :extra1, "extra2" => :extra2 }
+    
+    obj1 = Strava::HashBasedStore.new(@connection, @big_attribute_map, {}, {'id' => 13, 'name' => 'Fred'})
+    assert obj1.name == 'Fred'
+    assert obj1.id == 13
+
+    obj2 = Strava::HashBasedStore.new(@connection, @big_attribute_map, {},
+      {'id' => 13, 'name' => 'Fred', 'extra1' => 'red', 'extra2' => 'sneaker'})
+    assert obj2.name == 'Fred'
+    assert obj2.id == 13
+    assert obj2.extra1 == 'red'
+    assert obj2.extra2 == 'sneaker'
+    
+    obj1.merge(obj2)
+    assert obj1.name == 'Fred'
+    assert obj1.id == 13
+    assert obj1.extra1 == 'red'
+    assert obj1.extra2 == 'sneaker'
+  end
 end
