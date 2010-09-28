@@ -45,6 +45,12 @@ and see the members of a club
 
   s.club_members(club_id)
   
+Alternatively, you can work in a more object oriented way.  The .clubs("part of club name") method returns an array of Strava::Club objects.  The Strava::Club object makes club_show and club_members available as instance methods
+
+  my_club = s.clubs("Fred's Riders").first
+  my_club.show
+  my_club.members
+  
 == Rides
 Using the API, you can search for rides using any combination of criteria
 
@@ -73,6 +79,12 @@ To see details on a particular ride
 A ride is composed of a list of efforts (time, etc spent on each segment which makes up part of the ride).  To see the efforts for a particular ride,
 
   s.ride_efforts(ride_id)
+
+Alternatively, you can work in a more object oriented way.  The .rides(:filter => value) method returns an array of Strava::Ride objects.  The Strava::Ride object makes ride_show and ride_efforts available as instance methods
+
+    my_ride = s.rides(:club_id => my_club.id).first
+    my_ride.show
+    my_ride.efforts
 
 === When more than 50 rides match your criteria
 In response to a .rides call, Strava will return the first 50 rides that match whatever criteria are supplied. To see all matching rides, you will need to call .rides and also include an :offset parameter
