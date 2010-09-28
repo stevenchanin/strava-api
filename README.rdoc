@@ -174,4 +174,4 @@ Strava is maintained by {Steve Chanin}[http://devleverage.com].
 
 == Copyright
 
-Copyright (c) 2010 steven_chanin. See LICENSE for details.
+Copyright (c) 2010 Steven Chanin. See LICENSE for details.
