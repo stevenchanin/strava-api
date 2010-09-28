@@ -17,6 +17,16 @@ mocha (only if you want to run the tests) [http://github.com/floehopper/mocha]
 = Usage
 Strava is a Ruby wrapper for working with Strava API.
 
+== Loading the Strava gem classes
+Before you can use the gem's classes and methods, you have to load them
+
+in a Rails app
+  require 'strava'
+
+in a plain irb session
+  require 'rubygems'
+  require 'strava'
+
 == Creating a Strava::Base object
 In order to interact with the Strava API, you need a Strava::Base object
 
