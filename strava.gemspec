@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{strava}
-  s.version = "0.9.0"
+  s.version = "0.9.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Steven Chanin"]
-  s.date = %q{2010-09-27}
+  s.date = %q{2010-09-28}
   s.description = %q{Strava (http://www.strava.com/) allows access to it's data via a JSON api.  This gem wraps that API an allows you to interact with Ruby classes instead.}
   s.email = %q{steven_chanin@alum.mit.edu}
   s.extra_rdoc_files = [
@@ -24,9 +24,15 @@ Gem::Specification.new do |s|
      "lib/strava/base.rb",
      "lib/strava/clubs.rb",
      "lib/strava/efforts.rb",
+     "lib/strava/exceptions.rb",
+     "lib/strava/hash_based_store.rb",
      "lib/strava/rides.rb",
      "lib/strava/segments.rb",
      "test/helper.rb",
+     "test/test_base.rb",
+     "test/test_clubs.rb",
+     "test/test_rides.rb",
+     "test/test_segments.rb",
      "test/test_strava.rb"
   ]
   s.homepage = %q{http://github.com/stevenchanin/strava}
@@ -36,6 +42,10 @@ Gem::Specification.new do |s|
   s.summary = %q{Provides a Ruby interface to the Strava api}
   s.test_files = [
     "test/helper.rb",
+     "test/test_base.rb",
+     "test/test_clubs.rb",
+     "test/test_rides.rb",
+     "test/test_segments.rb",
      "test/test_strava.rb"
   ]
 
