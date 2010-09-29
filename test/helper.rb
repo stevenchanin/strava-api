@@ -121,4 +121,8 @@ class Test::Unit::TestCase
   def ride_effort_method_json
     '{"ride":{"name":"from SVRMC","id":191846},"efforts":[{"elapsed_time":41,"segment":{"name":"Valley Vista Bump","id":626862},"id":2684066}]}'
   end
+  
+  def effort_show_method
+    '{"effort":{"ride":{"name":"02/28/10 San Francisco, CA","id":77563},"averageSpeed":20149.3205741627,"startDate":"2010-02-28T08:38:39-08:00","averageWatts":151.84,"startDateLocal":"2010-02-28T00:38:39-08:00","maximumSpeed":26861.148,"timeZoneOffset":-8.0,"athlete":{"username":"julianbill","name":"Julian Bill","id":1139},"elevationGain":15.8616,"distance":1181.38,"elapsedTime":209,"segment":{"name":"Panhandle to GGP","id":623323},"id":2231990,"movingTime":209}}'
+  end
 end

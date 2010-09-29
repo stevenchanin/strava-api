@@ -141,6 +141,10 @@ See the instructions above for an example of how this works with .rides.
 To get full details on an effort (i.e. specifics on how a rider did on a specific stretch of a ride), you
 
   s.effort_show(effort_id)
+
+If you have an efforts object (Strava::Effort) that has been returned by another call (for example my_ride.efforts), you can use the .show method to fill out the missing details on that effort
+
+  my_ride.efforts.first.show
   
 == Error Handling
 The Strava gem raises errors under various conditions.

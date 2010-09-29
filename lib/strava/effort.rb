@@ -41,5 +41,10 @@ module Strava
     def initialize(connection, options = {})
       super(connection, ATTRIBUTE_MAP, NESTED_CLASS_MAP, options)
     end
+
+    def show
+      self.merge(@connection.effort_show(self.id))
+      self
+    end
   end #class Effort
 end
