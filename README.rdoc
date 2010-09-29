@@ -113,7 +113,7 @@ to see measurements / details on a segment,
 
 to see who rode a segment and how they did,
 
-  s.segment_efforts(segment_id)
+  s.segment_efforts(segment_id, {:param => value})
 
 To refine the data returned by segment_efforts, you can pass any combination of optional parameters:
 
@@ -132,6 +132,14 @@ Example
   #only shows each riders best time
   s.segment_efforts(segment_id, :club_id => club_id, :start_date => Date.civil(2010,7,1), :best => true)
 
+Alternatively, you can work in a more object oriented way.  Given a Strava::Segment object returned by another method call, you can get it's full details and the efforts made on that segment using the .show and .efforts instance methods
+
+  #my_segment is a Strava::Segment
+
+  my_segment.show
+
+  my_segment.efforts(:athlete_id => 123)
+
 === When more than 50 efforts match your criteria
 In response to a .segment_efforts call, Strava will return the first 50 efforts that match whatever criteria are supplied. To see all matching efforts, you will need to call .segment_efforts and also include an :offset parameter.  
 
@@ -145,7 +153,7 @@ To get full details on an effort (i.e. specifics on how a rider did on a specifi
 If you have an efforts object (Strava::Effort) that has been returned by another call (for example my_ride.efforts), you can use the .show method to fill out the missing details on that effort
 
   my_ride.efforts.first.show
-  
+
 == Error Handling
 The Strava gem raises errors under various conditions.
 

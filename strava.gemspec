@@ -42,6 +42,7 @@ Gem::Specification.new do |s|
      "test/test_hash_based_store.rb",
      "test/test_ride.rb",
      "test/test_rides.rb",
+     "test/test_segment.rb",
      "test/test_segments.rb",
      "test/test_strava.rb"
   ]
@@ -59,6 +60,7 @@ Gem::Specification.new do |s|
      "test/test_hash_based_store.rb",
      "test/test_ride.rb",
      "test/test_rides.rb",
+     "test/test_segment.rb",
      "test/test_segments.rb",
      "test/test_strava.rb"
   ]

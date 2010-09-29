@@ -35,7 +35,7 @@ class TestSegments < Test::Unit::TestCase
 
   def test_segment_show
     #rl http://www.strava.com/api/v1/segments/99243
-    api_result = JSON.parse '{"segment":{"averageGrade":4.63873,"climbCategory":"4","name":"Hawk Hill Saddle","elevationGain":76.553,"distance":1771.88,"elevationHigh":172.694,"id":99243,"elevationLow":90.5013}}'
+    api_result = JSON.parse segment_show_json
     api_result.stubs(:parsed_response).returns("")
     Strava::Base.stubs(:get).with('/segments/99243', { :query => {} }).returns(api_result)
 

@@ -23,5 +23,14 @@ module Strava
     def initialize(connection, options = {})
       super(connection, ATTRIBUTE_MAP, {}, options)
     end
+
+    def show
+      self.merge(@connection.segment_show(self.id))
+      self
+    end
+    
+    def efforts(options = {})
+      @connection.segment_efforts(self.id, options)
+    end
   end
 end

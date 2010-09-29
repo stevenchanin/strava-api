@@ -81,6 +81,11 @@ class Test::Unit::TestCase
     '{"segments":[{"name":"Hawk Hill Saddle","id":99243},{"name":"Hawk Hill","id":229781},{"name":"Hawk Hill from Bunker Road","id":229783},{"name":"Ham Hawk Hill | PD","id":243831},{"name":"Hawk Hill from Fort Baker","id":461025},{"name":"Hawk Hill from Sausalito","id":522551},{"name":"Hawk Hill Backside Descent","id":589138},{"name":"Backside Hawk Hill Climb","id":615706},{"name":"Hawk Hill Saddle from Sausalito","id":617665},{"name":"Hawk Hill Saddle from Ft Baker","id":619494}]}'
   end
   
+  def segment_show_json
+    #curl http://www.strava.com/api/v1/segments/99243
+    '{"segment":{"averageGrade":4.63873,"climbCategory":"4","name":"Hawk Hill Saddle","elevationGain":76.553,"distance":1771.88,"elevationHigh":172.694,"id":99243,"elevationLow":90.5013}}'
+  end
+  
   def segment_efforts_index_json
     #curl http://www.strava.com/api/v1/segments/99243/efforts
     #note: cut some out because the response was so long
