@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{strava}
-  s.version = "0.12.0"
+  s.version = "0.12.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Steven Chanin"]
-  s.date = %q{2010-09-29}
+  s.date = %q{2010-10-04}
   s.description = %q{Strava (http://www.strava.com/) allows access to it's data via a JSON api.  This gem wraps that API an allows you to interact with Ruby classes instead.}
   s.email = %q{steven_chanin@alum.mit.edu}
   s.extra_rdoc_files = [
