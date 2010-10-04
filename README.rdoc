@@ -35,14 +35,17 @@ In order to interact with the Strava API, you need a Strava::Base object
 == Clubs
 The Strava API allows you to search for clubs by name,
 
+  #returns an array of Strava::Club objects (each object only has minimal attributes)
   s.clubs("part of club name")
 
 get full details on a club,
 
+  #returns a Strava::Club with full attributes
   s.club_show(club_id)
 
 and see the members of a club
 
+  #returns an array of Strava::Member objects
   s.club_members(club_id)
   
 Alternatively, you can work in a more object oriented way.  The .clubs("part of club name") method returns an array of Strava::Club objects.  The Strava::Club object makes club_show and club_members available as instance methods
@@ -64,6 +67,7 @@ Using the API, you can search for rides using any combination of criteria
 
 To get set of rides (by club),
 
+  #returns an array of up to 50 Strava::Ride objects (each object has minimal attributes)
   s.rides(:club_id => club_id)
 
 by athlete and start date
@@ -74,10 +78,12 @@ etc
 
 To see details on a particular ride
 
+  #returns a Strava::Ride with full attributes
   s.ride_show(ride_id)
   
 A ride is composed of a list of efforts (time, etc spent on each segment which makes up part of the ride).  To see the efforts for a particular ride,
 
+  #returns an array of Strava::Effort objects (each object has minimal attributes)
   s.ride_efforts(ride_id)
 
 Alternatively, you can work in a more object oriented way.  The .rides(:filter => value) method returns an array of Strava::Ride objects.  The Strava::Ride object makes ride_show and ride_efforts available as instance methods
@@ -105,14 +111,17 @@ Rides can be thought of as a sequence of segments (e.g. my "trip to the kitchen"
 
 To find a segment by name,
 
+  #returns an array of Strava::Segment objects (each object has minimal attributes)
   s.segments("part of segment name")
 
 to see measurements / details on a segment,
 
+  #returns a Strava::Segment with full attributes
   s.segment_show(segment_id)
 
 to see who rode a segment and how they did,
 
+  #returns an array of up to 50 Strava::Effort objects (each object has minimal attributes)
   s.segment_efforts(segment_id, {:param => value})
 
 To refine the data returned by segment_efforts, you can pass any combination of optional parameters:
@@ -148,6 +157,7 @@ See the instructions above for an example of how this works with .rides.
 == Efforts
 To get full details on an effort (i.e. specifics on how a rider did on a specific stretch of a ride), you
 
+  ##returns a Strava::Effort with full attributes
   s.effort_show(effort_id)
 
 If you have an efforts object (Strava::Effort) that has been returned by another call (for example my_ride.efforts), you can use the .show method to fill out the missing details on that effort
