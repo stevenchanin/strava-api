@@ -1,4 +1,4 @@
-module Strava
+module StravaApi
   # {
   #   "name":"Panoramic to Pan Toll",
   #   "id":156,

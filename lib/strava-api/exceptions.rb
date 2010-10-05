@@ -1,4 +1,4 @@
-module Strava
+module StravaApi
   class InvalidResponseError < StandardError; end
 
   class CommandError < StandardError; end

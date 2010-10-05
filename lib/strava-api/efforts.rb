@@ -1,4 +1,4 @@
-module Strava
+module StravaApi
   module Efforts
     def effort_show(id)
       result = call("efforts/#{id}", "effort", {})

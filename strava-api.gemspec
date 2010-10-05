@@ -4,14 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{strava}
-  s.version = "0.12.1"
+  s.name = %q{strava-api}
+  s.version = "0.13.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Steven Chanin"]
   s.date = %q{2010-10-04}
   s.description = %q{Strava (http://www.strava.com/) allows access to it's data via a JSON api.  This gem wraps that API an allows you to interact with Ruby classes instead.}
-  s.email = %q{steven_chanin@alum.mit.edu}
+  s.email = %q{schanin@devleverage.com}
   s.extra_rdoc_files = [
     "LICENSE",
      "README.rdoc"
@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
     "LICENSE",
      "README.rdoc",
      "Rakefile",
-     "lib/strava.rb",
+     "lib/strava-api.rb",
      "lib/strava-api/base.rb",
      "lib/strava-api/bike.rb",
      "lib/strava-api/club.rb",
@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
      "test/test_segments.rb",
      "test/test_strava.rb"
   ]
-  s.homepage = %q{http://github.com/stevenchanin/strava}
+  s.homepage = %q{http://github.com/stevenchanin/strava-api}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}

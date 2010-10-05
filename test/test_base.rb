@@ -3,28 +3,28 @@ require 'mocha'
 require 'json'
 
 class TestBase < Test::Unit::TestCase
-  ###### Testing Strava::Base
+  ###### Testing StravaApi::Base
   def setup
-    @s = Strava::Base.new
+    @s = StravaApi::Base.new
   end
 
   def test_create
-    assert @s.is_a?(Strava::Base)
+    assert @s.is_a?(StravaApi::Base)
   end
   
   def test_bad_command
-    Strava::Base.stubs(:get).with('/clubsx', {:query => {}}).raises(Strava::NetworkError)
+    StravaApi::Base.stubs(:get).with('/clubsx', {:query => {}}).raises(StravaApi::NetworkError)
 
-    expect_error(Strava::NetworkError) { @s.call('clubsx', 'club', {}) }
+    expect_error(StravaApi::NetworkError) { @s.call('clubsx', 'club', {}) }
     
     assert @s.errors.include?("NetworkError from httparty")
   end
   
   def test_bad_command
     @response = mock('HTTParty::Response', :parsed_response => '<html><body><h1>500 Internal Server Error</h1></body></html>')
-    Strava::Base.stubs(:get).with('/clubs', {:query => {}}).returns(@response)
+    StravaApi::Base.stubs(:get).with('/clubs', {:query => {}}).returns(@response)
 
-    expect_error(Strava::CommandError) { @s.call('clubs', 'club', {}) }
+    expect_error(StravaApi::CommandError) { @s.call('clubs', 'club', {}) }
     
     assert @s.errors.include?("Strava returned a 500 error")
   end

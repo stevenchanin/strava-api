@@ -4,20 +4,20 @@ require 'json'
 
 class TestSegments < Test::Unit::TestCase
   def setup
-    @s = Strava::Base.new
+    @s = StravaApi::Base.new
   end
   def test_segments_index
     #curl http://www.strava.com/api/v1/segments?name=hawk%20hill
     api_result = JSON.parse segments_index_json
     api_result.stubs(:parsed_response).returns("")
-    Strava::Base.stubs(:get).with('/segments', {:query => {:name => 'Hawk Hill'}}).returns(api_result)
+    StravaApi::Base.stubs(:get).with('/segments', {:query => {:name => 'Hawk Hill'}}).returns(api_result)
 
     result = @s.segments('Hawk Hill')
     
     assert result.is_a?(Array)
 
     result.each do |segment|
-      assert segment.is_a?(Strava::Segment)
+      assert segment.is_a?(StravaApi::Segment)
     end
   end
 
@@ -25,7 +25,7 @@ class TestSegments < Test::Unit::TestCase
     #curl http://www.strava.com/api/v1/segments?name=hawk%20hillxxxy
     api_result = JSON.parse '{"segments":[]}'
     api_result.stubs(:parsed_response).returns("")
-    Strava::Base.stubs(:get).with('/segments', {:query => {:name => 'Hawk Hill98xcasdf'}}).returns(api_result)
+    StravaApi::Base.stubs(:get).with('/segments', {:query => {:name => 'Hawk Hill98xcasdf'}}).returns(api_result)
 
     result = @s.segments('Hawk Hill98xcasdf')
     
@@ -37,11 +37,11 @@ class TestSegments < Test::Unit::TestCase
     #rl http://www.strava.com/api/v1/segments/99243
     api_result = JSON.parse segment_show_json
     api_result.stubs(:parsed_response).returns("")
-    Strava::Base.stubs(:get).with('/segments/99243', { :query => {} }).returns(api_result)
+    StravaApi::Base.stubs(:get).with('/segments/99243', { :query => {} }).returns(api_result)
 
     result = @s.segment_show(99243)
     
-    assert result.is_a?(Strava::Segment)
+    assert result.is_a?(StravaApi::Segment)
     assert result.name == "Hawk Hill Saddle"
     assert result.id == 99243
     assert result.average_grade == 4.63873
@@ -55,9 +55,9 @@ class TestSegments < Test::Unit::TestCase
   def test_segment_efforts_with_invalid_id
     api_result = JSON.parse '{"error":"Invalid segments/0"}'
     api_result.stubs(:parsed_response).returns("")
-    Strava::Base.stubs(:get).with('/segments/0/efforts', {:query => {}}).returns(api_result)
+    StravaApi::Base.stubs(:get).with('/segments/0/efforts', {:query => {}}).returns(api_result)
 
-    expect_error(Strava::InvalidResponseError) { @s.segment_efforts(0) }
+    expect_error(StravaApi::InvalidResponseError) { @s.segment_efforts(0) }
     
     assert @s.errors.include?("Invalid segments/0")
   end
@@ -67,14 +67,14 @@ class TestSegments < Test::Unit::TestCase
     #note: cut some out because the response was so long
     api_result = JSON.parse segment_efforts_index_json
     api_result.stubs(:parsed_response).returns("")
-    Strava::Base.stubs(:get).with('/segments/99243/efforts', {:query => {}}).returns(api_result)
+    StravaApi::Base.stubs(:get).with('/segments/99243/efforts', {:query => {}}).returns(api_result)
 
     result = @s.segment_efforts(99243)
     
     assert result.is_a?(Array)
     
     result.each do |effort|
-      assert effort.is_a?(Strava::Effort)
+      assert effort.is_a?(StravaApi::Effort)
     end
   end
 
@@ -82,14 +82,14 @@ class TestSegments < Test::Unit::TestCase
     #curl http://www.strava.com/api/v1/segments/99243/efforts?athleteId=1377
     api_result = JSON.parse segment_efforts_index_by_athlete_id_json
     api_result.stubs(:parsed_response).returns("")
-    Strava::Base.stubs(:get).with('/segments/99243/efforts', {:query => {'athleteId' => 1377}}).returns(api_result)
+    StravaApi::Base.stubs(:get).with('/segments/99243/efforts', {:query => {'athleteId' => 1377}}).returns(api_result)
 
     result = @s.segment_efforts(99243, {:athlete_id => 1377})
     
     assert result.is_a?(Array)
     
     result.each do |effort|
-      assert effort.is_a?(Strava::Effort)
+      assert effort.is_a?(StravaApi::Effort)
       assert effort.athlete.id == 1377, "#{effort.athlete.id} != 1377"
     end
   end
@@ -98,14 +98,14 @@ class TestSegments < Test::Unit::TestCase
     #curl "http://www.strava.com/api/v1/segments/99243/efforts?athleteId=1377&startDate=2010-07-01"
     api_result = JSON.parse segment_efforts_index_by_athlete_id_and_start_date_json
     api_result.stubs(:parsed_response).returns("")
-    Strava::Base.stubs(:get).with('/segments/99243/efforts', {:query => {'athleteId' => 1377, 'startDate' => Date.civil(2010,7,1)}}).returns(api_result)
+    StravaApi::Base.stubs(:get).with('/segments/99243/efforts', {:query => {'athleteId' => 1377, 'startDate' => Date.civil(2010,7,1)}}).returns(api_result)
 
     result = @s.segment_efforts(99243, {:athlete_id => 1377, :start_date => Date.civil(2010,7,1)})
     
     assert result.is_a?(Array)
     
     result.each do |effort|
-      assert effort.is_a?(Strava::Effort)
+      assert effort.is_a?(StravaApi::Effort)
       assert effort.athlete.id == 1377, "#{effort.athlete.id} != 1377"
 
       #works with the real api call, but the stub that is just JSON parsing isn't converting times to Time objects
@@ -118,14 +118,14 @@ class TestSegments < Test::Unit::TestCase
     #curl http://www.strava.com/api/v1/segments/99243/efforts?clubId=15&best=true
     api_result = JSON.parse segment_efforts_index_by_club_id_and_best_json
     api_result.stubs(:parsed_response).returns("")
-    Strava::Base.stubs(:get).with('/segments/99243/efforts', {:query => {'clubId' => 15, 'best' => true}}).returns(api_result)
+    StravaApi::Base.stubs(:get).with('/segments/99243/efforts', {:query => {'clubId' => 15, 'best' => true}}).returns(api_result)
 
     result = @s.segment_efforts(99243, {:club_id => 15, :best => true})
     
     assert result.is_a?(Array)
     
     result.each do |effort|
-      assert effort.is_a?(Strava::Effort)
+      assert effort.is_a?(StravaApi::Effort)
     end
     
     athletes = result.collect {|e| e.athlete.username}.sort
@@ -140,11 +140,11 @@ class TestSegments < Test::Unit::TestCase
     #curl http://www.strava.com/api/v1/segments/99243/efforts
     api_result = JSON.parse segment_efforts_index_using_offset_json
     api_result.stubs(:parsed_response).returns("")
-    Strava::Base.stubs(:get).with('/segments/99243/efforts', {:query => {}}).returns(api_result)
+    StravaApi::Base.stubs(:get).with('/segments/99243/efforts', {:query => {}}).returns(api_result)
 
     api_result2 = JSON.parse segment_efforts_index_using_offset_50_json
     api_result2.stubs(:parsed_response).returns("")
-    Strava::Base.stubs(:get).with('/segments/99243/efforts', {:query => {'offset' => 50}}).returns(api_result2)
+    StravaApi::Base.stubs(:get).with('/segments/99243/efforts', {:query => {'offset' => 50}}).returns(api_result2)
 
     set_1 = @s.segment_efforts(99243)
     set_2 = @s.segment_efforts(99243, :offset => 50)
@@ -152,8 +152,8 @@ class TestSegments < Test::Unit::TestCase
     assert set_1.is_a?(Array)
     assert set_2.is_a?(Array)
     
-    set_1.each {|ride| assert ride.is_a?(Strava::Effort)}
-    set_2.each {|ride| assert ride.is_a?(Strava::Effort)}
+    set_1.each {|ride| assert ride.is_a?(StravaApi::Effort)}
+    set_2.each {|ride| assert ride.is_a?(StravaApi::Effort)}
     
     #but there shouldn't be any overlap
     set_1_ids = set_1.collect(&:id)

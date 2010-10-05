@@ -1,4 +1,4 @@
-module Strava
+module StravaApi
   # {"ride":{
   #   "timeZoneOffset":-8.0,
   #   "elevationGain":1441.02,

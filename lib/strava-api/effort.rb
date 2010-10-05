@@ -1,4 +1,4 @@
-module Strava
+module StravaApi
   # {
   #   "id"=>688432, 
   #   "elapsedTime"=>598, 

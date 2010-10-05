@@ -4,11 +4,11 @@ require 'json'
 
 class TestSegment < Test::Unit::TestCase
   def setup
-    @s = Strava::Base.new
+    @s = StravaApi::Base.new
 
     api_result = JSON.parse segments_index_json
     api_result.stubs(:parsed_response).returns("")
-    Strava::Base.stubs(:get).with('/segments', {:query => {:name => 'Hawk Hill'}}).returns(api_result)
+    StravaApi::Base.stubs(:get).with('/segments', {:query => {:name => 'Hawk Hill'}}).returns(api_result)
 
     @segment = @s.segments("Hawk Hill").first
   end
@@ -16,7 +16,7 @@ class TestSegment < Test::Unit::TestCase
   def test_show
     api_result = JSON.parse segment_show_json
     api_result.stubs(:parsed_response).returns("")
-    Strava::Base.stubs(:get).with('/segments/99243', { :query => {} }).returns(api_result)
+    StravaApi::Base.stubs(:get).with('/segments/99243', { :query => {} }).returns(api_result)
 
     assert @segment.id == 99243
     assert @segment.name == "Hawk Hill Saddle"
@@ -24,7 +24,7 @@ class TestSegment < Test::Unit::TestCase
     assert @segment.elevation_high.nil?
 
     result = @segment.show
-    assert result.is_a?(Strava::Segment)
+    assert result.is_a?(StravaApi::Segment)
     
     assert @segment.id == 99243
     assert @segment.name == "Hawk Hill Saddle"
@@ -35,21 +35,21 @@ class TestSegment < Test::Unit::TestCase
   def test_efforts
     api_result = JSON.parse segment_efforts_index_json
     api_result.stubs(:parsed_response).returns("")
-    Strava::Base.stubs(:get).with('/segments/99243/efforts', { :query => {} }).returns(api_result)
+    StravaApi::Base.stubs(:get).with('/segments/99243/efforts', { :query => {} }).returns(api_result)
     
     efforts = @segment.efforts
     
     assert efforts.is_a?(Array)
     assert efforts.size == 3
     efforts.each do |effort|
-      assert effort.is_a?(Strava::Effort)
+      assert effort.is_a?(StravaApi::Effort)
     end
   end
   
   def test_efforts_with_athlete_id
     api_result = JSON.parse segment_efforts_index_by_athlete_id_json
     api_result.stubs(:parsed_response).returns("")
-    Strava::Base.stubs(:get).with('/segments/99243/efforts', { :query => {'athleteId' => 1377} }).returns(api_result)
+    StravaApi::Base.stubs(:get).with('/segments/99243/efforts', { :query => {'athleteId' => 1377} }).returns(api_result)
     
     efforts = @segment.efforts(:athlete_id => 1377)
     
@@ -57,7 +57,7 @@ class TestSegment < Test::Unit::TestCase
 
     assert efforts.size == 17
     efforts.each do |effort|
-      assert effort.is_a?(Strava::Effort)
+      assert effort.is_a?(StravaApi::Effort)
     end
   end
 end

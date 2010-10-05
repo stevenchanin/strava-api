@@ -1,0 +1,22 @@
+require 'httparty'
+require 'strava-api/exceptions'
+
+#classes used to hold results from Strava
+require 'strava-api/hash_based_store'
+require 'strava-api/club'
+require 'strava-api/member'
+require 'strava-api/bike'
+require 'strava-api/ride'
+require 'strava-api/segment'
+require 'strava-api/effort'
+
+module StravaApi
+  #everything now in independent class files
+end
+
+#classes to perform network access to Strava
+require 'strava-api/clubs'
+require 'strava-api/rides'
+require 'strava-api/segments'
+require 'strava-api/efforts'
+require 'strava-api/base'

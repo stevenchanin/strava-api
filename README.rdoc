@@ -1,10 +1,10 @@
-= strava
+= strava-api
 
 Strava (http://www.strava.com/) allows access to it's data via a JSON api.  This gem wraps that API an allows you to interact with Ruby classes instead.
 
 = Installation
 
-  gem install strava
+  gem install strava-api
   
 depending on your installation, you may need to use sudo
 
@@ -15,40 +15,40 @@ httparty [http://github.com/jnunemaker/httparty]
 mocha (only if you want to run the tests) [http://github.com/floehopper/mocha]
 
 = Usage
-Strava is a Ruby wrapper for working with Strava API.
+StravaApi is a Ruby wrapper for working with Strava API.
 
-== Loading the Strava gem classes
+== Loading the StravaApi gem classes
 Before you can use the gem's classes and methods, you have to load them
 
 in a Rails app
-  require 'strava'
+  require 'strava-api'
 
 in a plain irb session
   require 'rubygems'
-  require 'strava'
+  require 'strava-api'
 
-== Creating a Strava::Base object
-In order to interact with the Strava API, you need a Strava::Base object
+== Creating a StravaApi::Base object
+In order to interact with the Strava API, you need a StravaApi::Base object
 
-  s = Strava::Base.new
+  s = StravaApi::Base.new
 
 == Clubs
 The Strava API allows you to search for clubs by name,
 
-  #returns an array of Strava::Club objects (each object only has minimal attributes)
+  #returns an array of StravaApi::Club objects (each object only has minimal attributes)
   s.clubs("part of club name")
 
 get full details on a club,
 
-  #returns a Strava::Club with full attributes
+  #returns a StravaApi::Club with full attributes
   s.club_show(club_id)
 
 and see the members of a club
 
-  #returns an array of Strava::Member objects
+  #returns an array of StravaApi::Member objects
   s.club_members(club_id)
   
-Alternatively, you can work in a more object oriented way.  The .clubs("part of club name") method returns an array of Strava::Club objects.  The Strava::Club object makes club_show and club_members available as instance methods
+Alternatively, you can work in a more object oriented way.  The .clubs("part of club name") method returns an array of StravaApi::Club objects.  The StravaApi::Club object makes club_show and club_members available as instance methods
 
   my_club = s.clubs("Fred's Riders").first
   my_club.show
@@ -67,7 +67,7 @@ Using the API, you can search for rides using any combination of criteria
 
 To get set of rides (by club),
 
-  #returns an array of up to 50 Strava::Ride objects (each object has minimal attributes)
+  #returns an array of up to 50 StravaApi::Ride objects (each object has minimal attributes)
   s.rides(:club_id => club_id)
 
 by athlete and start date
@@ -78,15 +78,15 @@ etc
 
 To see details on a particular ride
 
-  #returns a Strava::Ride with full attributes
+  #returns a StravaApi::Ride with full attributes
   s.ride_show(ride_id)
   
 A ride is composed of a list of efforts (time, etc spent on each segment which makes up part of the ride).  To see the efforts for a particular ride,
 
-  #returns an array of Strava::Effort objects (each object has minimal attributes)
+  #returns an array of StravaApi::Effort objects (each object has minimal attributes)
   s.ride_efforts(ride_id)
 
-Alternatively, you can work in a more object oriented way.  The .rides(:filter => value) method returns an array of Strava::Ride objects.  The Strava::Ride object makes ride_show and ride_efforts available as instance methods
+Alternatively, you can work in a more object oriented way.  The .rides(:filter => value) method returns an array of StravaApi::Ride objects.  The StravaApi::Ride object makes ride_show and ride_efforts available as instance methods
 
     my_ride = s.rides(:club_id => my_club.id).first
     my_ride.show
@@ -111,17 +111,17 @@ Rides can be thought of as a sequence of segments (e.g. my "trip to the kitchen"
 
 To find a segment by name,
 
-  #returns an array of Strava::Segment objects (each object has minimal attributes)
+  #returns an array of StravaApi::Segment objects (each object has minimal attributes)
   s.segments("part of segment name")
 
 to see measurements / details on a segment,
 
-  #returns a Strava::Segment with full attributes
+  #returns a StravaApi::Segment with full attributes
   s.segment_show(segment_id)
 
 to see who rode a segment and how they did,
 
-  #returns an array of up to 50 Strava::Effort objects (each object has minimal attributes)
+  #returns an array of up to 50 StravaApi::Effort objects (each object has minimal attributes)
   s.segment_efforts(segment_id, {:param => value})
 
 To refine the data returned by segment_efforts, you can pass any combination of optional parameters:
@@ -141,9 +141,9 @@ Example
   #only shows each riders best time
   s.segment_efforts(segment_id, :club_id => club_id, :start_date => Date.civil(2010,7,1), :best => true)
 
-Alternatively, you can work in a more object oriented way.  Given a Strava::Segment object returned by another method call, you can get it's full details and the efforts made on that segment using the .show and .efforts instance methods
+Alternatively, you can work in a more object oriented way.  Given a StravaApi::Segment object returned by another method call, you can get it's full details and the efforts made on that segment using the .show and .efforts instance methods
 
-  #my_segment is a Strava::Segment
+  #my_segment is a StravaApi::Segment
 
   my_segment.show
 
@@ -157,31 +157,31 @@ See the instructions above for an example of how this works with .rides.
 == Efforts
 To get full details on an effort (i.e. specifics on how a rider did on a specific stretch of a ride), you
 
-  ##returns a Strava::Effort with full attributes
+  ##returns a StravaApi::Effort with full attributes
   s.effort_show(effort_id)
 
-If you have an efforts object (Strava::Effort) that has been returned by another call (for example my_ride.efforts), you can use the .show method to fill out the missing details on that effort
+If you have an efforts object (StravaApi::Effort) that has been returned by another call (for example my_ride.efforts), you can use the .show method to fill out the missing details on that effort
 
   my_ride.efforts.first.show
 
 == Error Handling
-The Strava gem raises errors under various conditions.
+The StravaApi gem raises errors under various conditions.
 
-If an error is raised, check .errors on your Strava::Base object to see more details
+If an error is raised, check .errors on your StravaApi::Base object to see more details
 
   s.errors
 
-=== Strava::NetworkError
+=== StravaApi::NetworkError
 This is raised when the attempt to connect to Strava via httparty raises any of the following:
 * HTTParty::UnsupportedFormat
 * HTTParty::UnsupportedURIScheme
 * HTTParty::ResponseError
 * HTTParty::RedirectionTooDeep
 
-=== Strava::InvalidResponseError
+=== StravaApi::InvalidResponseError
 This is raised is the call to Strava returns a result describing an error rather than the data you requested.
 
-=== Strava::CommandError
+=== StravaApi::CommandError
 This is raised if your request causes Strava to return a 500 Error.
 This is also raised if you attempt to run a command that lacks required parameters.  For example, trying to call
   .clubs("")
@@ -189,22 +189,22 @@ with an empty string or
   .rides()
 with no options will raise this error.
 
-=== Strava::InternalError
+=== StravaApi::InternalErrorInternalError
 This is raised if you attempt to access an invalid property of a result.  For example,
 
   my_seg = s.segment_show(segment_id)
-  # => returns a <Strava::Segment>
+  # => returns a <StravaApi::Segment>
   
   my_seg.bogus_property
   
-will raise a Strava::InternalError
+will raise a StravaApi::InternalErrorInternalError
 
   
 this returns distance, maximum speed, average speed, etc, etc for that part of the ride.
 
 = Contributors
 
-Strava is maintained by {Steve Chanin}[http://devleverage.com].
+StravaApi is maintained by {Steve Chanin}[http://devleverage.com].
 
 == Note on Patches/Pull Requests
  

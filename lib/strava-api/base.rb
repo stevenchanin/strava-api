@@ -1,11 +1,11 @@
-module Strava
+module StravaApi
   class Base
     include HTTParty
     
-    include Strava::Clubs
-    include Strava::Rides
-    include Strava::Segments
-    include Strava::Efforts
+    include StravaApi::Clubs
+    include StravaApi::Rides
+    include StravaApi::Segments
+    include StravaApi::Efforts
     
     format :json
     base_uri 'www.strava.com/api/v1'

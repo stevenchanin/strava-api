@@ -1,4 +1,4 @@
-module Strava
+module StravaApi
   module Segments
     #returns all segments, don't need an offset
     def segments(name)

@@ -1,4 +1,4 @@
-module Strava
+module StravaApi
   module Rides
     def rides(options = {})
       options_map = {
@@ -17,7 +17,7 @@ module Strava
         filtered_options[converted] = options[key] if options[key]
       end
 
-      raise Strava::CommandError if filtered_options.empty?
+      raise StravaApi::CommandError if filtered_options.empty?
 
       result = call("rides", "rides", filtered_options)
       result["rides"].collect {|item| Ride.new(self, item)}

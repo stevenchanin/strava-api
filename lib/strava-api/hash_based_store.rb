@@ -1,4 +1,4 @@
-module Strava
+module StravaApi
   class HashBasedStore
     def initialize(connection, attribute_map, nested_class_map, options)
       @connection = connection
@@ -31,7 +31,7 @@ module Strava
       "#<#{self.class} [#{result.join(', ')}]>"
     end
     
-    #cleanup how Strava objects are displayed in irb
+    #cleanup how StravaApi objects are displayed in irb
     alias_method :original_inspect, :inspect
     alias_method :inspect, :to_s
     

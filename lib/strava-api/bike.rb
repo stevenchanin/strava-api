@@ -1,4 +1,4 @@
-module Strava
+module StravaApi
   class Bike < HashBasedStore
     ATTRIBUTE_MAP = {'name' => :name, 'id' => :id }
     def initialize(connection, options = {})

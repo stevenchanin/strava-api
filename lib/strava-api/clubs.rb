@@ -1,11 +1,11 @@
-module Strava
+module StravaApi
   module Clubs
     #returns all clubs, don't need an offset
     def clubs(name)
-      raise Strava::CommandError if name.blank?
+      raise StravaApi::CommandError if name.blank?
       
       name = name.strip
-      raise Strava::CommandError if name.empty?
+      raise StravaApi::CommandError if name.empty?
 
       result = call("clubs", "clubs", {:name => name})
 
