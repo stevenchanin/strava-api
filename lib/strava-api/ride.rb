@@ -51,5 +51,9 @@ module StravaApi
     def efforts
       @connection.ride_efforts(self.id)
     end
+    
+    def streams
+      @connection.ride_streams(self.id)
+    end
   end #class Ride
 end

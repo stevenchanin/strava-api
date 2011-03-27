@@ -35,5 +35,10 @@ module StravaApi
     
       result["efforts"].collect {|effort| Effort.new(self, effort)}
     end
+    
+    def ride_streams(id)
+      result = call("streams/#{id}", nil, {})
+      Streams.new(self, result.to_hash)
+    end
   end
 end
