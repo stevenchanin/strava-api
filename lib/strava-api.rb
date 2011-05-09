@@ -11,6 +11,7 @@ require 'strava-api/segment'
 require 'strava-api/effort'
 require 'strava-api/settings'
 require 'strava-api/user'
+require 'strava-api/streams'
 
 module StravaApi
   #everything now in independent class files
