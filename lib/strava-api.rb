@@ -9,12 +9,15 @@ require 'strava-api/bike'
 require 'strava-api/ride'
 require 'strava-api/segment'
 require 'strava-api/effort'
+require 'strava-api/settings'
+require 'strava-api/user'
 
 module StravaApi
   #everything now in independent class files
 end
 
 #classes to perform network access to Strava
+require 'strava-api/authentication'
 require 'strava-api/clubs'
 require 'strava-api/rides'
 require 'strava-api/segments'

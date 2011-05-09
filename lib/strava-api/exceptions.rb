@@ -6,4 +6,6 @@ module StravaApi
   class NetworkError < StandardError; end
 
   class InternalError < StandardError; end
+  
+  class AuthenticationError < StandardError; end
 end

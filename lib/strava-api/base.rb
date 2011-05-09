@@ -2,6 +2,7 @@ module StravaApi
   class Base
     include HTTParty
     
+    include StravaApi::Authentication
     include StravaApi::Clubs
     include StravaApi::Rides
     include StravaApi::Segments
@@ -9,6 +10,7 @@ module StravaApi
     
     format :json
     base_uri 'www.strava.com/api/v1'
+    debug_output $stdout
     
     attr_reader :errors
     
@@ -16,9 +18,16 @@ module StravaApi
       @errors = []
     end
     
-    def call(command, key, options)
+    def call(command, key, options, *args)
+      method = args[0] || :get
+            
       begin
-        result = self.class.get("/#{command}", :query => options)
+        if(method == :get)
+          result = self.class.get("/#{command}", :query => options)
+        else
+          result = self.class.post("/#{command}", :body => options)
+        end
+        
       rescue HTTParty::UnsupportedFormat, HTTParty::UnsupportedURIScheme, HTTParty::ResponseError, HTTParty::RedirectionTooDeep
         raise NetworkError.new
       end
@@ -27,9 +36,10 @@ module StravaApi
         @errors << "Strava returned a 500 error"
         raise CommandError.new 
       end
-      
+
       @errors << result["error"] if result && result["error"]
-      raise InvalidResponseError.new if result.nil? || !result["error"].blank? || result[key].nil?
+      raise AuthenticationError.new if result["error"] == "Invalid email or password."
+      raise InvalidResponseError.new if result.nil? || !result["error"].blank? || (!key.nil? && result[key].nil?)
       
       result
     end
