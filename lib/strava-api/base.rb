@@ -10,7 +10,6 @@ module StravaApi
     
     format :json
     base_uri 'www.strava.com/api/v1'
-    debug_output $stdout
     
     attr_reader :errors
     
