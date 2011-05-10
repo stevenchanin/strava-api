@@ -1,7 +1,6 @@
 require 'helper'
 require 'mocha'
 require 'json'
-require 'pp'
 
 class TestUserAuthentication < Test::Unit::TestCase
   def setup
