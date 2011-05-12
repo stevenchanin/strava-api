@@ -130,4 +130,12 @@ class Test::Unit::TestCase
   def effort_show_method
     '{"effort":{"ride":{"name":"02/28/10 San Francisco, CA","id":77563},"averageSpeed":20149.3205741627,"startDate":"2010-02-28T08:38:39-08:00","averageWatts":151.84,"startDateLocal":"2010-02-28T00:38:39-08:00","maximumSpeed":26861.148,"timeZoneOffset":-8.0,"athlete":{"username":"julianbill","name":"Julian Bill","id":1139},"elevationGain":15.8616,"distance":1181.38,"elapsedTime":209,"segment":{"name":"Panhandle to GGP","id":623323},"id":2231990,"movingTime":209}}'
   end
+  
+  def login_failure_json
+    '{"success":"false","error":"Invalid email or password."}'
+  end
+  
+  def login_success_json
+    '{"success":true,"token":"d41d8cd98f00b204e980","athlete_id":1234,"agreedToTerms":true,"superUser":false,"defaultSettings":{"sampleRate":3,"continuousGps":true,"accuracy":0,"distanceFilter":3,"maxSearchTime":30,"minStaleTime":300,"minAccuracy":150}}'
+  end
 end
