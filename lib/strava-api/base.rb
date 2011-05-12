@@ -29,7 +29,7 @@ module StravaApi
       end
       
       @errors << result["error"] if result && result["error"]
-      raise InvalidResponseError.new if result.nil? || !result["error"].blank? || result[key].nil?
+      raise InvalidResponseError.new if result.nil? || !result["error"].blank? || (!key.nil? && result[key].nil?)
       
       result
     end

@@ -183,4 +183,21 @@ class TestRides < Test::Unit::TestCase
     assert result.first.segment.is_a?(StravaApi::Segment)
     assert result.first.segment.name == "Panhandle to GGP"
   end
+  
+  def test_ride_streams
+    #curl "http://www.strava.com/api/v1/streams/77563"
+    api_result = JSON.parse ride_streams_json
+    api_result.stubs(:parsed_response).returns("")
+    StravaApi::Base.stubs(:get).with('/streams/77563', { :query => {} }).returns(api_result)
+    
+    result = @s.ride_streams(77563)
+    
+    assert result.is_a?(StravaApi::Streams)
+    assert !result.altitude.empty?
+    assert !result.distance.empty?
+    assert !result.heartrate.empty?
+    assert !result.latlng.empty?
+    assert !result.time.empty?
+    assert !result.watts_calc.empty?
+  end
 end

@@ -9,6 +9,7 @@ require 'strava-api/bike'
 require 'strava-api/ride'
 require 'strava-api/segment'
 require 'strava-api/effort'
+require 'strava-api/streams'
 
 module StravaApi
   #everything now in independent class files
