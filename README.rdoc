@@ -164,6 +164,31 @@ If you have an efforts object (StravaApi::Effort) that has been returned by anot
 
   my_ride.efforts.first.show
 
+== Streams
+The Strava API also has a Streams API call as well.  This isn't documented on the Strava API wiki, so use it at your own risk.
+
+The Steam for a ride provides the raw data from your ride
+
+* altitude
+* cadence
+* distance
+* heartrate
+* latlng
+* time
+* watts
+* watts_calc
+
+To get a the underlying stream for a ride, you can call 
+
+  ##returns a StravaApi::Streams
+  s.ride_streams(ride_id)
+
+Or you can start from a ride (StravaApi::Ride) and call 
+
+  my_ride.streams
+  
+Thanks to Andrew Olson (https://github.com/anolson) for this feature.
+
 == Error Handling
 The StravaApi gem raises errors under various conditions.
 
