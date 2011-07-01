@@ -78,7 +78,7 @@ class Test::Unit::TestCase
   
   def ride_streams_json
     #curl "http://www.strava.com/api/v1/streams/77563"
-    File.new('streams.json').gets
+    File.new('test/streams.json').gets
   end
   
   def segments_index_json
