@@ -189,6 +189,21 @@ Or you can start from a ride (StravaApi::Ride) and call
   
 Thanks to Andrew Olson (https://github.com/anolson) for this feature.
 
+== User Authentication
+To authenticate a user with Strava, you can call
+
+  user = s.login("email@gmail.com", "secret")
+
+A successful authentication returns a User object containing:
+
+* token
+* athlete_id
+* agreed_to_terms
+* super_user
+* default_settings
+
+An AuthenticationError is raised for a failed authentication attempt.
+
 == Error Handling
 The StravaApi gem raises errors under various conditions.
 
@@ -202,6 +217,9 @@ This is raised when the attempt to connect to Strava via httparty raises any of 
 * HTTParty::UnsupportedURIScheme
 * HTTParty::ResponseError
 * HTTParty::RedirectionTooDeep
+
+=== StravaApi::AuthenticationError
+This is raised when a user authentication attempt failed.
 
 === StravaApi::InvalidResponseError
 This is raised is the call to Strava returns a result describing an error rather than the data you requested.
