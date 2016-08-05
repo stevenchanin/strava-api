@@ -1,6 +1,6 @@
 = strava-api
 
-Strava (http://www.strava.com/) allows access to it's data via a JSON api.  This gem wraps that API an allows you to interact with Ruby classes instead.
+Strava (http://www.strava.com/) allows access to it's data via a JSON api.  This gem wraps that API and allows you to interact with Ruby classes instead.
 
 = Installation
 
