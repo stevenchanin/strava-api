@@ -1,3 +1,8 @@
+= DEPRECATION NOTICE
+This library is for the old v2 Strava API.
+
+Please go to https://github.com/jaredholdcroft/strava-api-v3 for Ruby support of the v3 API
+
 = strava-api
 
 Strava (http://www.strava.com/) allows access to it's data via a JSON api.  This gem wraps that API and allows you to interact with Ruby classes instead.
@@ -5,7 +10,7 @@ Strava (http://www.strava.com/) allows access to it's data via a JSON api.  This
 = Installation
 
   gem install strava-api
-  
+
 depending on your installation, you may need to use sudo
 
 = Requirements
@@ -47,13 +52,13 @@ and see the members of a club
 
   #returns an array of StravaApi::Member objects
   s.club_members(club_id)
-  
+
 Alternatively, you can work in a more object oriented way.  The .clubs("part of club name") method returns an array of StravaApi::Club objects.  The StravaApi::Club object makes club_show and club_members available as instance methods
 
   my_club = s.clubs("Fred's Riders").first
   my_club.show
   my_club.members
-  
+
 == Rides
 Using the API, you can search for rides using any combination of criteria
 
@@ -80,7 +85,7 @@ To see details on a particular ride
 
   #returns a StravaApi::Ride with full attributes
   s.ride_show(ride_id)
-  
+
 A ride is composed of a list of efforts (time, etc spent on each segment which makes up part of the ride).  To see the efforts for a particular ride,
 
   #returns an array of StravaApi::Effort objects (each object has minimal attributes)
@@ -150,7 +155,7 @@ Alternatively, you can work in a more object oriented way.  Given a StravaApi::S
   my_segment.efforts(:athlete_id => 123)
 
 === When more than 50 efforts match your criteria
-In response to a .segment_efforts call, Strava will return the first 50 efforts that match whatever criteria are supplied. To see all matching efforts, you will need to call .segment_efforts and also include an :offset parameter.  
+In response to a .segment_efforts call, Strava will return the first 50 efforts that match whatever criteria are supplied. To see all matching efforts, you will need to call .segment_efforts and also include an :offset parameter.
 
 See the instructions above for an example of how this works with .rides.
 
@@ -178,15 +183,15 @@ The Steam for a ride provides the raw data from your ride
 * watts
 * watts_calc
 
-To get a the underlying stream for a ride, you can call 
+To get a the underlying stream for a ride, you can call
 
   ##returns a StravaApi::Streams
   s.ride_streams(ride_id)
 
-Or you can start from a ride (StravaApi::Ride) and call 
+Or you can start from a ride (StravaApi::Ride) and call
 
   my_ride.streams
-  
+
 Thanks to Andrew Olson (https://github.com/anolson) for this feature.
 
 == Error Handling
@@ -219,12 +224,12 @@ This is raised if you attempt to access an invalid property of a result.  For ex
 
   my_seg = s.segment_show(segment_id)
   # => returns a <StravaApi::Segment>
-  
+
   my_seg.bogus_property
-  
+
 will raise a StravaApi::InternalErrorInternalError
 
-  
+
 this returns distance, maximum speed, average speed, etc, etc for that part of the ride.
 
 = Contributors
@@ -232,7 +237,7 @@ this returns distance, maximum speed, average speed, etc, etc for that part of t
 StravaApi is maintained by {Steve Chanin}[http://devleverage.com].
 
 == Note on Patches/Pull Requests
- 
+
 * Fork the project.
 * Make your feature addition or bug fix.
 * Add tests for it. This is important so I don't break it in a
